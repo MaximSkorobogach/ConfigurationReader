@@ -24,9 +24,9 @@ namespace ConfigurationReader.Web.Controllers.api
         /// Получить все конфигурации с пути
         /// </summary>
         /// <param name="directoryPath">Путь до файлов</param>
-        /// <returns></returns>
         [HttpGet]
         [Route("GetConfigurationsFromDirectoryPath")]
+        [ProducesResponseType(typeof(List<Configuration>), 200)]
         public IActionResult GetConfigurationsFromDirectoryPath(string directoryPath)
         {
             _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
@@ -57,6 +57,7 @@ namespace ConfigurationReader.Web.Controllers.api
         /// <param name = "filePaths" > Пути к файлам</param>
         [HttpGet]
         [Route("GetConfigurationFromFilesPaths")]
+        [ProducesResponseType(typeof(List<Configuration>), 200)]
         public IActionResult GetConfigurationFromFilesPaths(string[] filesPaths)
         {
             _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
@@ -87,6 +88,7 @@ namespace ConfigurationReader.Web.Controllers.api
         /// <param name="filePath">Путь до файла</param>
         [HttpGet]
         [Route("GetConfigurationFromFilePath")]
+        [ProducesResponseType(typeof(Configuration), 200)]
         public IActionResult GetConfigurationFromFilePath(string filePath)
         {
             _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
