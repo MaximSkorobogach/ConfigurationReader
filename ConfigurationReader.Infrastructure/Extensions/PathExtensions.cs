@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Enums;
 
 namespace ConfigurationReader.Infrastructure.Extensions
@@ -14,11 +15,11 @@ namespace ConfigurationReader.Infrastructure.Extensions
         public static bool IsExtensionForConfigurationFileType(this string filePath,
             ConfigurationFileType configurationFileType)
         {
-            if (filePath is null)
-                throw new Exception($"Не передан формат файла. Переданный формат: {filePath}");
+            if (string.IsNullOrEmpty(filePath))
+                throw new Exception(string.Format(AllConsts.Errors.PathIsNullOrEmpty));
 
             if (!Path.Exists(filePath))
-                throw new Exception($"Файла в указаном пути нет. Путь: {filePath}");
+                throw new Exception(string.Format(AllConsts.Errors.PathNotExists, filePath));
 
             return String.Equals(Path.GetExtension(filePath), configurationFileType.GetDescription(),
                 StringComparison.CurrentCultureIgnoreCase);
