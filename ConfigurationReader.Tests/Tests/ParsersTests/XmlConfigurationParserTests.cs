@@ -22,7 +22,7 @@ public class XmlConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_CorrectXml_ReturnsConfiguration()
+    public void GetConfigurationRecord_CorrectXmlConfig_ReturnsConfiguration()
     {
         var testConfigFullPath = _testService.CreateConfigsForTestPath("CorrectXmlConfig.xml");
 
@@ -36,26 +36,26 @@ public class XmlConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_NotFulledXml_ThrowsException()
+    public void GetConfigurationRecord_HalfFilledXmlConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFulledXmlConfig.xml");
+        var testConfigFullPath = _testService.CreateConfigsForTestPath("HalfFilledXmlConfig.xml");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
         var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
 
-        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFulled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }
 
     [Fact]
-    public void GetConfigurationRecord_NullXml_ThrowsException()
+    public void GetConfigurationRecord_NotFilledXmlConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NullXmlConfig.xml");
+        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFilledXmlConfig.xml");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
         var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
 
-        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFulled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }
 }

@@ -37,7 +37,7 @@ public class ConfigurationServiceTests
     #region GetConfigurationsFromDirectoryPath
 
     [Fact]
-    public void GetConfigurationsFromDirectoryPath_ReturnsConfigurations()
+    public void GetConfigurationsFromDirectoryPath_AllFilesCorrect_ReturnsConfigurations()
     {
         var directoryPath = "test_directory";
         var files = new List<FileDto>
@@ -66,7 +66,7 @@ public class ConfigurationServiceTests
     #region GetConfigurationFromFilesPaths
 
     [Fact]
-    public void GetConfigurationFromFilesPaths_ReturnsConfigurations()
+    public void GetConfigurationFromFilesPaths_AllFilesCorrect_ReturnsConfigurations()
     {
         var directoryPath = "test_directory";
         var files = new List<FileDto>
@@ -90,12 +90,40 @@ public class ConfigurationServiceTests
         _testService.CleanupTestDirectory(directoryPath);
     }
 
+    [Fact]
+    public void GetConfigurationFromFilesPaths_AnyFileNotSupported_ThrowsException()
+    {
+        var directoryPath = "test_directory";
+        var files = new List<FileDto>
+        {
+            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv"),
+            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml"),
+            new FileDto("file1.unknown", ".unknown", $"{directoryPath}\\file1.unknown"),
+        };
+        var filesPaths = files.Select(x => x.FilePath).ToArray();
+
+        _testService.SetupTestDirectory(directoryPath, filesPaths);
+
+        var configuration = new Configuration { };
+
+        ConfigureMocks(configuration, directoryPath, files);
+
+        var exception =
+            Assert.Throws<Exception>(() => _configurationService.GetConfigurationFromFilesPaths(filesPaths));
+
+        Assert.Equal(
+            string.Format(AllConsts.Errors.ParsingFileHasError, files.Last().FilePath,
+                AllConsts.Errors.FileFormatNotAvailableForParsing), exception.Message);
+
+        _testService.CleanupTestDirectory(directoryPath);
+    }
+
     #endregion
 
     #region GetConfigurationFromFilePath
 
     [Fact]
-    public void GetConfigurationFromFilePath_ReturnsConfigurations()
+    public void GetConfigurationFromFilePath_AllFilesCorrect_ReturnsConfiguration()
     {
         var directoryPath = "test_directory";
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");
@@ -116,7 +144,7 @@ public class ConfigurationServiceTests
     }
 
     [Fact]
-    public void GetConfigurationFromFilePath_ReturnsNull_WhenFileFormatNotAvailableForParsing()
+    public void GetConfigurationFromFilePath_NullConfiguration_ReturnsNull()
     {
         var directoryPath = "test_directory";
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");
@@ -134,7 +162,7 @@ public class ConfigurationServiceTests
     }
 
     [Fact]
-    public void GetConfigurationFromFilePath_ThrowsException_WhenParsingFails()
+    public void GetConfigurationFromFilePath_ParserThrowsException_ThrowsException()
     {
         var directoryPath = "test_directory";
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");

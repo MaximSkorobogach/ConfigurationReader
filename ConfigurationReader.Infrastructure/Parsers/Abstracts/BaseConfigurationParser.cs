@@ -44,7 +44,7 @@ public abstract class BaseConfigurationParser : IConfigurationParser
             throw new ParserAlgorithmException(string.Format(AllConsts.Errors.CreatedConfigurationIsNull, GetType().Name));
 
         if (!configuration.AllStringPropertiesIsNotEmpty() || !configuration.AllPropertiesIsNotNull())
-            throw new ParserAlgorithmException(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFulled, GetType().Name));
+            throw new ParserAlgorithmException(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, GetType().Name));
     } 
 
     protected abstract Configuration? GetConfigurationRecord(byte[] fileBytes);

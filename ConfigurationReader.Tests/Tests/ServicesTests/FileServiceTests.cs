@@ -16,7 +16,7 @@ public class FileServiceTests
     #region GetAllFilesFromDirectoryPath
 
     [Fact]
-    public void GetAllFilesFromDirectoryPath_ShouldReturnFiles_WhenDirectoryExists()
+    public void GetAllFilesFromDirectoryPath_ExistDirectoryPath_ReturnsFiles()
     {
         string directoryPath = "TestDirectory";
         string[] filePaths = { "TestDirectory\\file1.txt", "TestDirectory\\file2.txt" };
@@ -36,7 +36,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetAllFilesFromDirectoryPath_ShouldThrowException_WhenDirectoryDoesNotExist()
+    public void GetAllFilesFromDirectoryPath_NotExistDirectoryPath_ThrowsPathException()
     {
         string directoryPath = "NonExistingDirectory";
 
@@ -45,7 +45,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetAllFilesFromDirectoryPath_ShouldThrowException_WhenPathIsNull()
+    public void GetAllFilesFromDirectoryPath_NullDirectoryPath_ThrowsPathException()
     {
         string directoryPath = null;
 
@@ -54,7 +54,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetAllFilesFromDirectoryPath_ShouldThrowException_WhenPathIsEmpty()
+    public void GetAllFilesFromDirectoryPath_EmptyDirectoryPath_ThrowsPathException()
     {
         string directoryPath = string.Empty;
 
@@ -66,7 +66,7 @@ public class FileServiceTests
     #region GetFilesFromFilesPaths
 
     [Fact]
-    public void GetFilesFromFilesPaths_ShouldReturnFiles_WhenDirectoryExists()
+    public void GetFilesFromFilesPaths_ExistsFilesPaths_ReturnsFiles()
     {
         string directoryPath = "TestDirectory";
         string[] filesPaths = { "TestDirectory\\file1.txt", "TestDirectory\\file2.txt" };
@@ -86,7 +86,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFilesFromFilesPaths_ShouldThrowException_WhenAnyPathNotExists()
+    public void GetFilesFromFilesPaths_NotExistsAnyPath_ThrowsPathException()
     {
         string[] filePaths = { "NonExistingDirectory\\file1.txt", "NonExistingDirectory\\file2.txt" };
 
@@ -95,7 +95,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFilesFromFilesPaths_ShouldThrowException_WhenAnyNullPath()
+    public void GetFilesFromFilesPaths_NullAnyPaths_ThrowsPathExceptions()
     {
         string[] filesPaths = { null, "NonExistingDirectory\\file2.txt" };
 
@@ -104,7 +104,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFilesFromFilesPaths_ShouldThrowException_WhenPathIsEmpty()
+    public void GetFilesFromFilesPaths_EmptyAnyPaths_ThrowsPathException()
     {
         string[] filesPaths = { "", "NonExistingDirectory\\file2.txt" };
 
@@ -117,7 +117,7 @@ public class FileServiceTests
     #region GetFileFromFilePath
 
     [Fact]
-    public void GetFileFromFilePath_ShouldReturnFiles_WhenDirectoryExists()
+    public void GetFileFromFilePath_ExistFilePath_ReturnsFile()
     {
         string directoryPath = "TestDirectory";
         string filePath = "TestDirectory\\file1.txt";
@@ -133,7 +133,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFileFromFilePath_ShouldThrowException_WhenAnyPathNotExists()
+    public void GetFileFromFilePath_NotExistFilePath_ThrowsPathException()
     {
         string filePath = "NonExistingDirectory\\file1.txt";
 
@@ -142,7 +142,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFileFromFilePath_ShouldThrowException_WhenAnyNullPath()
+    public void GetFileFromFilePath_NullFilePath_ThrowsPathException()
     {
         string filePath = null;
 
@@ -151,7 +151,7 @@ public class FileServiceTests
     }
 
     [Fact]
-    public void GetFileFromFilePath_ShouldThrowException_WhenPathIsEmpty()
+    public void GetFileFromFilePath_EmptyFilePath_ThrowsPathException()
     {
         string filePath = "";
 

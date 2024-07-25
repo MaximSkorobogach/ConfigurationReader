@@ -22,7 +22,7 @@ public class CsvConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_CorrectCsv_ReturnsConfiguration()
+    public void GetConfigurationRecord_CorrectCsvConfig_ReturnsConfiguration()
     {
         var testConfigFullPath = _testService.CreateConfigsForTestPath("CorrectCsvConfig.csv");
 
@@ -36,21 +36,21 @@ public class CsvConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_NotFulledCsv_ThrowsException()
+    public void GetConfigurationRecord_HalfFilledCsvConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFulledCsvConfig.csv");
+        var testConfigFullPath = _testService.CreateConfigsForTestPath("HalfFilledCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
         var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
 
-        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFulled, nameof(CsvConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(CsvConfigurationParser)), exception.Message);
     }
 
     [Fact]
-    public void GetConfigurationRecord_NullCsv_ThrowsException()
+    public void GetConfigurationRecord_NotFilledCsvConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NullCsvConfig.csv");
+        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFilledCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
