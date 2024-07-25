@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Enums;
+using ConfigurationReader.Infrastructure.Exceptions;
 
 namespace ConfigurationReader.Infrastructure.Extensions
 {
@@ -16,10 +17,10 @@ namespace ConfigurationReader.Infrastructure.Extensions
             ConfigurationFileType configurationFileType)
         {
             if (string.IsNullOrEmpty(filePath))
-                throw new Exception(string.Format(AllConsts.Errors.PathIsNullOrEmpty));
+                throw new PathException(string.Format(AllConsts.Errors.PathIsNullOrEmpty));
 
             if (!Path.Exists(filePath))
-                throw new Exception(string.Format(AllConsts.Errors.PathNotExists, filePath));
+                throw new PathException(string.Format(AllConsts.Errors.PathNotExists, filePath));
 
             return String.Equals(Path.GetExtension(filePath), configurationFileType.GetDescription(),
                 StringComparison.CurrentCultureIgnoreCase);

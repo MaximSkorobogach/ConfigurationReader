@@ -21,7 +21,7 @@ public class ConfigurationService : IConfigurationService
     public List<Configuration> GetConfigurationsFromDirectoryPath(string directoryPath)
     {
         var files = _fileService.GetAllFilesFromDirectoryPath(directoryPath);
-        return GetConfigurationsFromFiles(files);
+        return GetConfigurationsFromFiles(files, filesGetFromDirectoryPath: true);
     }
 
     public List<Configuration> GetConfigurationFromFilesPaths(string[] filesPaths)
@@ -36,17 +36,17 @@ public class ConfigurationService : IConfigurationService
         return TryGetConfigurationFromFile(file);
     }
 
-    private List<Configuration> GetConfigurationsFromFiles(List<FileDto> files)
+    private List<Configuration> GetConfigurationsFromFiles(List<FileDto> files, bool filesGetFromDirectoryPath = false)
     {
         var configurations = new List<Configuration>();
 
         files.ForEach(file =>
         {
+            var configuration = TryGetConfigurationFromFile(file, 
+                ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
 
-                var configuration = TryGetConfigurationFromFile(file, ignoreNotAvailableForParsing: true);
-
-                if (configuration is not null)
-                    configurations.Add(configuration);
+            if (configuration is not null)
+                configurations.Add(configuration);
         });
 
         return configurations;
