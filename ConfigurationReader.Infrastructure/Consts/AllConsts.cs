@@ -32,9 +32,9 @@ namespace ConfigurationReader.Infrastructure.Consts
         public class Tracing
         {
             public const string MethodStarted = "Запущен метод {0}, параметры: {1}";
-            public const string MethodFinished = "Метод {0} завершен";
+            public const string MethodFinished = "Метод {0} завершен, время обработки: {1}";
             public const string ParsingStarted = "Парсинг через алгоритм {0} запущен";
-            public const string ParsingFinished = "Парсинг через алгоритм {0} завершен";
+            public const string ParsingFinished = "Парсинг через алгоритм {0} завершен, время обработки: {1}";
         }
     }
 }

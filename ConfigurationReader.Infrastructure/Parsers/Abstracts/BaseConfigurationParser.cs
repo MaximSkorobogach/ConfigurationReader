@@ -1,4 +1,5 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
+﻿using System.Diagnostics;
+using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Extensions;
@@ -19,7 +20,9 @@ public abstract class BaseConfigurationParser : IConfigurationParser
     public virtual Configuration Parse(byte[] fileBytes)
     {
         Configuration configuration;
-        _logger.LogTrace(string.Format(AllConsts.Tracing.ParsingStarted, GetType().Name));
+        _logger.LogInformation(string.Format(AllConsts.Tracing.ParsingStarted, GetType().Name));
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
 
         try
         {
@@ -33,7 +36,8 @@ public abstract class BaseConfigurationParser : IConfigurationParser
 
         ValidateConfiguration(configuration);
 
-        _logger.LogTrace(string.Format(AllConsts.Tracing.ParsingFinished, GetType().Name));
+        stopWatch.Stop();
+        _logger.LogInformation(string.Format(AllConsts.Tracing.ParsingFinished, GetType().Name, stopWatch.Elapsed));
 
         return configuration;
     }

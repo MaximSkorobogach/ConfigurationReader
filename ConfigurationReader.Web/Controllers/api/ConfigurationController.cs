@@ -1,4 +1,5 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
+﻿using System.Diagnostics;
+using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -29,15 +30,18 @@ namespace ConfigurationReader.Web.Controllers.api
         [ProducesResponseType(typeof(List<Configuration>), 200)]
         public IActionResult GetConfigurationsFromDirectoryPath(string directoryPath)
         {
-            _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
+            _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationsFromDirectoryPath), directoryPath));
+            var stopWatch = new Stopwatch();
 
             try
             {
+                stopWatch.Start();
                 var configurations = _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
+                stopWatch.Stop();
 
-                _logger.LogTrace(string.Format(AllConsts.Tracing.MethodFinished,
-                    nameof(GetConfigurationsFromDirectoryPath)));
+                _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,
+                    nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
 
                 return Ok(configurations);
             }
@@ -60,15 +64,18 @@ namespace ConfigurationReader.Web.Controllers.api
         [ProducesResponseType(typeof(List<Configuration>), 200)]
         public IActionResult GetConfigurationFromFilesPaths(string[] filesPaths)
         {
-            _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
+            _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationFromFilesPaths), string.Join("; ", filesPaths)));
+            var stopWatch = new Stopwatch();
 
             try
             {
+                stopWatch.Start();
                 var configurations = _configurationService.GetConfigurationFromFilesPaths(filesPaths);
+                stopWatch.Stop();
 
-                _logger.LogTrace(string.Format(AllConsts.Tracing.MethodFinished,
-                    nameof(GetConfigurationsFromDirectoryPath)));
+                _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,
+                    nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
 
                 return Ok(configurations);
             }
@@ -91,15 +98,18 @@ namespace ConfigurationReader.Web.Controllers.api
         [ProducesResponseType(typeof(Configuration), 200)]
         public IActionResult GetConfigurationFromFilePath(string filePath)
         {
-            _logger.LogTrace(string.Format(AllConsts.Tracing.MethodStarted,
+            _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationFromFilesPaths), filePath));
+            var stopWatch = new Stopwatch();
 
             try
             {
+                stopWatch.Start();
                 var configuration = _configurationService.GetConfigurationFromFilePath(filePath);
+                stopWatch.Stop();
 
-                _logger.LogTrace(string.Format(AllConsts.Tracing.MethodFinished,
-                    nameof(GetConfigurationsFromDirectoryPath)));
+                _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,
+                    nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
 
                 return Ok(configuration);
             }
