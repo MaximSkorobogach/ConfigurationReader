@@ -20,7 +20,7 @@ public class ConfigurationService : IConfigurationService
 
     public List<Configuration> GetConfigurationsFromDirectoryPath(string directoryPath)
     {
-        var files = _fileService.GetAllFilesFromDirectoryPath(directoryPath);
+        var files = _fileService.GetFilesFromDirectoryPath(directoryPath);
         return GetConfigurationsFromFiles(files, filesGetFromDirectoryPath: true);
     }
 
@@ -58,7 +58,7 @@ public class ConfigurationService : IConfigurationService
 
         try
         {
-            var configurationFileType = file.GetConfigurationFileTypeFromPath();
+            var configurationFileType = file.GetConfigurationFileType();
 
             if (configurationFileType is null)
             {

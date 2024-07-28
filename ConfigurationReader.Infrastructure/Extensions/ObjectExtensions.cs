@@ -1,4 +1,5 @@
 ﻿using ConfigurationReader.Infrastructure.Consts;
+using ConfigurationReader.Infrastructure.DTO;
 
 namespace ConfigurationReader.Infrastructure.Extensions;
 
@@ -9,20 +10,18 @@ public static class ObjectExtensions
     /// </summary>
     public static bool AllPropertiesIsNotNull(this object objectToCheck)
     {
-        if (objectToCheck is null)
-            throw new NullReferenceException(AllConsts.Errors.ObjectIsNull);
+        ArgumentNullException.ThrowIfNull(objectToCheck);
 
         return objectToCheck.GetType().GetProperties()
             .All(pi => pi.GetValue(objectToCheck) != null);
     }
 
     /// <summary>
-    /// Все string свойства объекта не null, пустые, пробелы
+    /// Все <see cref="string"/> свойства объекта заполнены
     /// </summary>
     public static bool AllStringPropertiesIsNotEmpty(this object objectToCheck)
     {
-        if (objectToCheck is null)
-            throw new NullReferenceException(AllConsts.Errors.ObjectIsNull);
+        ArgumentNullException.ThrowIfNull(objectToCheck);
 
         return objectToCheck.GetType().GetProperties()
             .Where(x => x.PropertyType == typeof(string))

@@ -9,7 +9,7 @@ namespace ConfigurationReader.Infrastructure.Services;
 
 public class FileService : IFileService
 {
-    public List<FileDto> GetAllFilesFromDirectoryPath(string directoryPath)
+    public List<FileDto> GetFilesFromDirectoryPath(string directoryPath)
     {
         ThrowIfPathNotExisting(directoryPath);
 

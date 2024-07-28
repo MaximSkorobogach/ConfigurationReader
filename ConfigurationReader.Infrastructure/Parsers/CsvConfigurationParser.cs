@@ -16,7 +16,7 @@ public class CsvConfigurationParser : BaseConfigurationParser
     {
     }
 
-    protected override Configuration GetConfigurationRecord(byte[] fileBytes)
+    protected override Configuration? GetConfigurationRecord(byte[] fileBytes)
     {
         using var memoryStream = new MemoryStream(fileBytes);
         using var reader = new StreamReader(memoryStream);

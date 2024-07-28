@@ -14,7 +14,7 @@ public class FileServiceTests
     private readonly IFileService _fileService = new FileService();
     private readonly ITestService _testService = new TestService();
 
-    #region GetAllFilesFromDirectoryPath
+    #region GetFilesFromDirectoryPath
 
     [Fact]
     public void GetAllFilesFromDirectoryPath_ExistDirectoryPath_ReturnsFiles()
@@ -33,7 +33,7 @@ public class FileServiceTests
 
         _testService.SetupTestDirectory(directoryPath, filePaths);
 
-        var result = _fileService.GetAllFilesFromDirectoryPath(directoryPath);
+        var result = _fileService.GetFilesFromDirectoryPath(directoryPath);
 
         _testService.AssertFileDtos(expectedFiles, result);
 
@@ -45,7 +45,7 @@ public class FileServiceTests
     {
         string directoryPath = "NonExistingDirectory".GetPlatformSpecificPath();
 
-        var exception = Assert.Throws<PathException>(() => _fileService.GetAllFilesFromDirectoryPath(directoryPath));
+        var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
         Assert.Equal(string.Format(AllConsts.Errors.PathNotExists, directoryPath), exception.Message);
     }
 
@@ -54,7 +54,7 @@ public class FileServiceTests
     {
         string directoryPath = null;
 
-        var exception = Assert.Throws<PathException>(() => _fileService.GetAllFilesFromDirectoryPath(directoryPath));
+        var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
         Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
     }
 
@@ -63,7 +63,7 @@ public class FileServiceTests
     {
         string directoryPath = string.Empty;
 
-        var exception = Assert.Throws<PathException>(() => _fileService.GetAllFilesFromDirectoryPath(directoryPath));
+        var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
         Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
     }
     #endregion

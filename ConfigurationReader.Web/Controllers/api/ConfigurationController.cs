@@ -4,7 +4,6 @@ using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ServiceStack.Messaging;
 
 namespace ConfigurationReader.Web.Controllers.api
 {

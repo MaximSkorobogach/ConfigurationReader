@@ -224,7 +224,7 @@ public class ConfigurationServiceTests
     private void ConfigureFileServiceMocks(string directoryPath, List<FileDto> files)
     {
         _mockFileService
-            .Setup(fs => fs.GetAllFilesFromDirectoryPath(directoryPath))
+            .Setup(fs => fs.GetFilesFromDirectoryPath(directoryPath))
             .Returns(files);
 
         var path = files.First().FilePath;

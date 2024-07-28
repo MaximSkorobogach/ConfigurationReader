@@ -14,7 +14,7 @@ public class XmlConfigurationParser : BaseConfigurationParser
     {
     }
 
-    protected override Configuration GetConfigurationRecord(byte[] fileBytes)
+    protected override Configuration? GetConfigurationRecord(byte[] fileBytes)
     {
         using var memoryStream = new MemoryStream(fileBytes);
         var serializer = new XmlSerializer(typeof(Configuration));

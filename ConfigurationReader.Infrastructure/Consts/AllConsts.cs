@@ -25,8 +25,8 @@ namespace ConfigurationReader.Infrastructure.Consts
             public const string HasErrorInParsingAlgorithm = "Алгоритм парсинга {0} выдал ошибку. {1}";
             public const string CreatedConfigurationIsNull = "Конфигурация из парсера {0} создана пустой";
             public const string CreatedConfigurationIsNotFilled = "Конфигурация из парсера {0} не заполнена полностью";
-            public const string ObjectIsNull = "Объект для проверки пуст";
             public const string CantFindAttribute = "Не найден атрибут {0} для значения {1}";
+            public const string ExtensionInFileDtoIsNullOrEmpty = "В ДТО файла не передан формат файла";
         }
 
         public class Tracing

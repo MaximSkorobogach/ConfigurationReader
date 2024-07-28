@@ -13,17 +13,17 @@ namespace ConfigurationReader.Infrastructure.Extensions
         /// </summary>
         /// <param name="fileDto">Экземпляр файла</param>
         /// <param name="configurationFileType">Тип конфигурационного файла</param>
-        /// <exception cref="PathException">Ошибки доступа к пути</exception>
+        /// <exception cref="ArgumentNullException">Не передано ДТО</exception>
+        /// <exception cref="PathException">В ДТО отсутствует заполненное поле "формат файла"</exception>
         public static bool IsFileOfConfigurationType(this FileDto fileDto,
             ConfigurationFileType configurationFileType)
         {
-            if (string.IsNullOrEmpty(fileDto.FilePath))
-                throw new PathException(string.Format(AllConsts.Errors.PathIsNullOrEmpty));
+            ArgumentNullException.ThrowIfNull(fileDto);
 
-            if (!Path.Exists(fileDto.FilePath))
-                throw new PathException(string.Format(AllConsts.Errors.PathNotExists, fileDto.FilePath));
+            if (string.IsNullOrWhiteSpace(fileDto.FileExtension))
+                throw new PathException(AllConsts.Errors.ExtensionInFileDtoIsNullOrEmpty);
 
-            return String.Equals(Path.GetExtension(fileDto.FilePath), configurationFileType.GetDescription(),
+            return String.Equals(fileDto.FileExtension, configurationFileType.GetDescription(),
                 StringComparison.CurrentCultureIgnoreCase);
         }
 
@@ -31,8 +31,11 @@ namespace ConfigurationReader.Infrastructure.Extensions
         /// Получить тип конфигурационного файла по файлу из пути
         /// </summary>
         /// <param name="fileDto">Экземпляр файла</param>
-        public static ConfigurationFileType? GetConfigurationFileTypeFromPath(this FileDto fileDto)
+        /// <exception cref="ArgumentNullException">Не передано ДТО</exception>
+        public static ConfigurationFileType? GetConfigurationFileType(this FileDto fileDto)
         {
+            ArgumentNullException.ThrowIfNull(fileDto);
+
             var enumValues =
                 Enum.GetValues(typeof(ConfigurationFileType))
                     .Cast<ConfigurationFileType>()
