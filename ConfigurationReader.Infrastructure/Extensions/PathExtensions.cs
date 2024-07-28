@@ -46,5 +46,15 @@ namespace ConfigurationReader.Infrastructure.Extensions
 
             return enumValues.First(fileDto.IsFileOfConfigurationType);
         }
+
+        /// <summary>
+        /// Получить путь с учетом формата пути спецификации системы
+        /// </summary>
+        public static string GetPlatformSpecificPath(this string relativePath)
+        {
+            return relativePath
+                .Replace("/", Path.DirectorySeparatorChar.ToString())
+                .Replace("\\", Path.DirectorySeparatorChar.ToString());
+        }
     }
 }

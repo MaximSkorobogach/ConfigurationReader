@@ -13,6 +13,7 @@ using ConfigurationReader.Tests.Services;
 using ConfigurationReader.Tests.Services.Interface;
 using Microsoft.Extensions.Logging;
 using Moq;
+using ConfigurationReader.Infrastructure.Extensions;
 
 namespace ConfigurationReader.Tests.Tests.ServicesTests;
 
@@ -42,11 +43,11 @@ public class ConfigurationServiceTests
         var directoryPath = "test_directory";
         var files = new List<FileDto>
         {
-            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv"),
-            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml"),
+            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath()),
+            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml".GetPlatformSpecificPath()),
         };
         var filesPaths = files.Select(x => x.FilePath).ToArray();
-
+        
         _testService.SetupTestDirectory(directoryPath, filesPaths);
 
         var configuration = new Configuration { };
@@ -71,8 +72,8 @@ public class ConfigurationServiceTests
         var directoryPath = "test_directory";
         var files = new List<FileDto>
         {
-            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv"),
-            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml"),
+            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath()),
+            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml".GetPlatformSpecificPath()),
         };
         var filesPaths = files.Select(x => x.FilePath).ToArray();
 
@@ -96,9 +97,9 @@ public class ConfigurationServiceTests
         var directoryPath = "test_directory";
         var files = new List<FileDto>
         {
-            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv"),
-            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml"),
-            new FileDto("file1.unknown", ".unknown", $"{directoryPath}\\file1.unknown"),
+            new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath()),
+            new FileDto("file1.xml", ".xml", $"{directoryPath}\\file1.xml".GetPlatformSpecificPath()),
+            new FileDto("file1.unknown", ".unknown", $"{directoryPath}\\file1.unknown".GetPlatformSpecificPath()),
         };
         var filesPaths = files.Select(x => x.FilePath).ToArray();
 
@@ -126,7 +127,7 @@ public class ConfigurationServiceTests
     public void GetConfigurationFromFilePath_AllFilesCorrect_ReturnsConfiguration()
     {
         var directoryPath = "test_directory";
-        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");
+        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
 
         var filesPaths = new string[] { file.FilePath };
 
@@ -147,7 +148,7 @@ public class ConfigurationServiceTests
     public void GetConfigurationFromFilePath_NullConfiguration_ReturnsNull()
     {
         var directoryPath = "test_directory";
-        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");
+        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
 
         var filesPaths = new string[] { file.FilePath };
         Configuration configuration = null;
@@ -165,7 +166,7 @@ public class ConfigurationServiceTests
     public void GetConfigurationFromFilePath_ParserThrowsException_ThrowsException()
     {
         var directoryPath = "test_directory";
-        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv");
+        var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
 
         var filesPaths = new string[] { file.FilePath };
         Configuration configuration = null;
