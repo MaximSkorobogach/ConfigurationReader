@@ -23,6 +23,10 @@ namespace ConfigurationReader.Tests.Services
         public void AssertFileDtos(List<FileDto> expectedFiles, List<FileDto> resultFiles)
         {
             Assert.Equal(expectedFiles.Count, resultFiles.Count);
+
+            expectedFiles = expectedFiles.OrderBy(f => f.FileName).ToList();
+            resultFiles = resultFiles.OrderBy(f => f.FileName).ToList();
+
             for (int i = 0; i < expectedFiles.Count; i++)
             {
                 AssertFileDto(expectedFiles[i], resultFiles[i]);
