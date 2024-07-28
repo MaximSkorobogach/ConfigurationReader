@@ -36,7 +36,7 @@ namespace ConfigurationReader.Tests.Services
             Assert.Equal(expectedFile.FilePath, resultFile.FilePath);
         }
 
-        public string CreateConfigsForTestPath(string configName)
+        public string GetConfigFullPath(string configName)
         {
             string workingDirectory = Environment.CurrentDirectory;
 

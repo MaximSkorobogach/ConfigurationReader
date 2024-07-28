@@ -8,5 +8,5 @@ public interface ITestService
     void CleanupTestDirectory(string directoryPath);
     void AssertFileDtos(List<FileDto> expectedFiles, List<FileDto> resultFiles);
     void AssertFileDto(FileDto expectedFile, FileDto resultFile);
-    string CreateConfigsForTestPath(string configName);
+    string GetConfigFullPath(string configName);
 }

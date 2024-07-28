@@ -10,7 +10,7 @@ namespace ConfigurationReader.Infrastructure.Consts
     {
         public class Tests
         {
-            public const string TestConfigurationsFileDirectory = "ConfigsForTest\\";
+            public const string TestConfigurationsFileDirectory = "ConfigsForTest";
         }
 
         public class Errors

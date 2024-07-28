@@ -24,7 +24,7 @@ public class XmlConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_CorrectXmlConfig_ReturnsConfiguration()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("CorrectXmlConfig.xml");
+        var testConfigFullPath = _testService.GetConfigFullPath("CorrectXmlConfig.xml");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
@@ -38,7 +38,7 @@ public class XmlConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_HalfFilledXmlConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("HalfFilledXmlConfig.xml");
+        var testConfigFullPath = _testService.GetConfigFullPath("HalfFilledXmlConfig.xml");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
@@ -50,7 +50,7 @@ public class XmlConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_NotFilledXmlConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFilledXmlConfig.xml");
+        var testConfigFullPath = _testService.GetConfigFullPath("NotFilledXmlConfig.xml");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 

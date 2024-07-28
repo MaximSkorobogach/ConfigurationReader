@@ -24,7 +24,7 @@ public class CsvConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_CorrectCsvConfig_ReturnsConfiguration()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("CorrectCsvConfig.csv");
+        var testConfigFullPath = _testService.GetConfigFullPath("CorrectCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
@@ -38,7 +38,7 @@ public class CsvConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_HalfFilledCsvConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("HalfFilledCsvConfig.csv");
+        var testConfigFullPath = _testService.GetConfigFullPath("HalfFilledCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
@@ -50,7 +50,7 @@ public class CsvConfigurationParserTests
     [Fact]
     public void GetConfigurationRecord_NotFilledCsvConfig_ThrowsParserAlgorithmException()
     {
-        var testConfigFullPath = _testService.CreateConfigsForTestPath("NotFilledCsvConfig.csv");
+        var testConfigFullPath = _testService.GetConfigFullPath("NotFilledCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
