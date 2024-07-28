@@ -9,8 +9,8 @@ using ConfigurationReader.Infrastructure.Parsers.Abstracts;
 using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using ConfigurationReader.Tests.Service;
-using ConfigurationReader.Tests.Service.Interface;
+using ConfigurationReader.Tests.Services;
+using ConfigurationReader.Tests.Services.Interface;
 using Microsoft.Extensions.Logging;
 using Moq;
 

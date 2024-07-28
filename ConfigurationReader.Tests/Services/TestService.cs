@@ -1,12 +1,7 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ConfigurationReader.Tests.Service.Interface;
+using ConfigurationReader.Tests.Services.Interface;
 
-namespace ConfigurationReader.Tests.Service
+namespace ConfigurationReader.Tests.Services
 { 
     public class TestService : ITestService
     {

@@ -2,8 +2,8 @@
 using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Parsers;
-using ConfigurationReader.Tests.Service;
-using ConfigurationReader.Tests.Service.Interface;
+using ConfigurationReader.Tests.Services;
+using ConfigurationReader.Tests.Services.Interface;
 using Microsoft.Extensions.Logging;
 using Moq;
 

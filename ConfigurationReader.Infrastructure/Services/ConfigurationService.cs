@@ -58,7 +58,7 @@ public class ConfigurationService : IConfigurationService
 
         try
         {
-            var configurationFileType = file.FilePath.GetConfigurationFileTypeFromPath();
+            var configurationFileType = file.GetConfigurationFileTypeFromPath();
 
             if (configurationFileType is null)
             {

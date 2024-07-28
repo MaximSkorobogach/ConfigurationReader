@@ -3,8 +3,8 @@ using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using ConfigurationReader.Tests.Service;
-using ConfigurationReader.Tests.Service.Interface;
+using ConfigurationReader.Tests.Services;
+using ConfigurationReader.Tests.Services.Interface;
 
 namespace ConfigurationReader.Tests.Tests.ServicesTests;
 

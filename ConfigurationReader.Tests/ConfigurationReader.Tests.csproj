@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="ConfigsForTest\" />
-    <Folder Include="Service\Interface\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
 
-namespace ConfigurationReader.Tests.Service.Interface;
+namespace ConfigurationReader.Tests.Services.Interface;
 
 public interface ITestService
 {
@@ -8,5 +8,5 @@ public interface ITestService
     void CleanupTestDirectory(string directoryPath);
     void AssertFileDtos(List<FileDto> expectedFiles, List<FileDto> resultFiles);
     void AssertFileDto(FileDto expectedFile, FileDto resultFile);
-    public string CreateConfigsForTestPath(string configName);
+    string CreateConfigsForTestPath(string configName);
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using ConfigurationReader.Infrastructure.Consts;
+using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Enums;
 using ConfigurationReader.Infrastructure.Exceptions;
 
@@ -10,27 +11,27 @@ namespace ConfigurationReader.Infrastructure.Extensions
         /// <summary>
         /// Указанный файл является этим типом конфигурационного файла
         /// </summary>
-        /// <param name="filePath">Путь к файлу</param>
+        /// <param name="fileDto">Экземпляр файла</param>
         /// <param name="configurationFileType">Тип конфигурационного файла</param>
-        /// <exception cref="Exception">К указанному пути нет доступа</exception>
-        public static bool IsExtensionForConfigurationFileType(this string filePath,
+        /// <exception cref="PathException">Ошибки доступа к пути</exception>
+        public static bool IsFileOfConfigurationType(this FileDto fileDto,
             ConfigurationFileType configurationFileType)
         {
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrEmpty(fileDto.FilePath))
                 throw new PathException(string.Format(AllConsts.Errors.PathIsNullOrEmpty));
 
-            if (!Path.Exists(filePath))
-                throw new PathException(string.Format(AllConsts.Errors.PathNotExists, filePath));
+            if (!Path.Exists(fileDto.FilePath))
+                throw new PathException(string.Format(AllConsts.Errors.PathNotExists, fileDto.FilePath));
 
-            return String.Equals(Path.GetExtension(filePath), configurationFileType.GetDescription(),
+            return String.Equals(Path.GetExtension(fileDto.FilePath), configurationFileType.GetDescription(),
                 StringComparison.CurrentCultureIgnoreCase);
         }
 
         /// <summary>
         /// Получить тип конфигурационного файла по файлу из пути
         /// </summary>
-        /// <param name="filePath">Путь к файлу</param>
-        public static ConfigurationFileType? GetConfigurationFileTypeFromPath(this string filePath)
+        /// <param name="fileDto">Экземпляр файла</param>
+        public static ConfigurationFileType? GetConfigurationFileTypeFromPath(this FileDto fileDto)
         {
             var enumValues =
                 Enum.GetValues(typeof(ConfigurationFileType))
@@ -38,12 +39,12 @@ namespace ConfigurationReader.Infrastructure.Extensions
                     .ToList();
 
             var hasConfigurationFileType = 
-                enumValues.Any(filePath.IsExtensionForConfigurationFileType);
+                enumValues.Any(fileDto.IsFileOfConfigurationType);
 
             if (!hasConfigurationFileType)
                 return null;
 
-            return enumValues.First(filePath.IsExtensionForConfigurationFileType);
+            return enumValues.First(fileDto.IsFileOfConfigurationType);
         }
     }
 }
