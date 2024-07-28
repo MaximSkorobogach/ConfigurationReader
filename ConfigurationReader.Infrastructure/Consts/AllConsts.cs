@@ -8,9 +8,9 @@ namespace ConfigurationReader.Infrastructure.Consts
 {
     public class AllConsts
     {
-        public class ConfigConsts
+        public class Tests
         {
-            public const string XmlDocumentRootNode = "config";
+            public const string TestConfigurationsFileDirectory = "ConfigsForTest\\";
         }
 
         public class Errors

@@ -1,4 +1,5 @@
-﻿using ConfigurationReader.Infrastructure.DTO;
+﻿using ConfigurationReader.Infrastructure.Consts;
+using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Tests.Services.Interface;
 
 namespace ConfigurationReader.Tests.Services
@@ -39,11 +40,11 @@ namespace ConfigurationReader.Tests.Services
         {
             string workingDirectory = Environment.CurrentDirectory;
 
-            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+            string projectDirectory = 
+                Directory.GetParent(workingDirectory).Parent.Parent.FullName;
 
-            string configTestsDirectory = "ConfigsForTest\\";
-
-            string testConfigFullPath = Path.Combine(projectDirectory, configTestsDirectory, configName);
+            string testConfigFullPath = 
+                Path.Combine(projectDirectory, AllConsts.Tests.TestConfigurationsFileDirectory, configName);
 
             return testConfigFullPath;
         }
