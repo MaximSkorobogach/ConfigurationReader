@@ -25,7 +25,7 @@ public class CsvConfigurationParserTests
     {
         var testConfigFullPath = _testService.GetConfigFullPath("CorrectCsvConfig.csv");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
         var result = await _parser.ParseAsync(fileBytes);
 

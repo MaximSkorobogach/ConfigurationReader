@@ -12,7 +12,7 @@ public abstract class BaseConfigurationParser : IConfigurationParser
 {
     private readonly ILogger<BaseConfigurationParser> _logger;
 
-    public BaseConfigurationParser(ILogger<BaseConfigurationParser> logger)
+    protected BaseConfigurationParser(ILogger<BaseConfigurationParser> logger)
     {
         _logger = logger;
     }
