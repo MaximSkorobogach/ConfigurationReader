@@ -1,7 +1,4 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.DTO;
-
-namespace ConfigurationReader.Infrastructure.Extensions;
+﻿namespace ConfigurationReader.Infrastructure.Extensions;
 
 public static class ObjectExtensions
 {

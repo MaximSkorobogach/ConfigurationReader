@@ -1,12 +1,9 @@
-﻿using Castle.Core.Logging;
-using ConfigurationReader.Infrastructure.Consts;
+﻿using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Enums;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Parsers;
-using ConfigurationReader.Infrastructure.Parsers.Abstracts;
-using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using ConfigurationReader.Tests.Services;
@@ -182,7 +179,7 @@ public class ConfigurationServiceTests
                 new ParserAlgorithmException(AllConsts.Errors.HasErrorInParsingAlgorithm));
 
         _mockConfigurationParserFactory
-            .Setup(pf => pf.CreateParser(ConfigurationFileType.csv))
+            .Setup(pf => pf.CreateParser(ConfigurationFileType.Csv))
             .Returns(parserCsvMock.Object);
 
         var exception =
@@ -213,11 +210,11 @@ public class ConfigurationServiceTests
         parserXmlMock.Setup(p => p.Parse(It.IsAny<byte[]>())).Returns(configuration);
 
         _mockConfigurationParserFactory
-            .Setup(pf => pf.CreateParser(ConfigurationFileType.csv))
+            .Setup(pf => pf.CreateParser(ConfigurationFileType.Csv))
             .Returns(parserCsvMock.Object);
 
         _mockConfigurationParserFactory
-            .Setup(pf => pf.CreateParser(ConfigurationFileType.xml))
+            .Setup(pf => pf.CreateParser(ConfigurationFileType.Xml))
             .Returns(parserXmlMock.Object);
     }
 

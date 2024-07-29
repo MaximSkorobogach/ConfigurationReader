@@ -1,6 +1,4 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
-using ConfigurationReader.Infrastructure.Enums;
-using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Exceptions;

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ConfigurationReader.Infrastructure.DTO
+﻿namespace ConfigurationReader.Infrastructure.DTO
 {
     public class Configuration
     {

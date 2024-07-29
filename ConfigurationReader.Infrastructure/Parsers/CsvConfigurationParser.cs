@@ -1,12 +1,9 @@
 ﻿using ConfigurationReader.Infrastructure.Parsers.Abstracts;
-using System.Formats.Asn1;
 using System.Globalization;
-using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.Extensions.Logging;
-using ConfigurationReader.Infrastructure.Exceptions;
 
 namespace ConfigurationReader.Infrastructure.Parsers;
 

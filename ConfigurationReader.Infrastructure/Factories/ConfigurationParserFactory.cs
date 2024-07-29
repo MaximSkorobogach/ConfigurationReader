@@ -4,7 +4,7 @@ using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Factories.Abstracts;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Parsers;
-using ConfigurationReader.Infrastructure.Parsers.Abstracts;
+using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 namespace ConfigurationReader.Infrastructure.Factories;
 
@@ -14,12 +14,12 @@ public class ConfigurationParserFactory : BaseFactory, IConfigurationParserFacto
     {
     }
 
-    public BaseConfigurationParser CreateParser(ConfigurationFileType configurationFileType)
+    public IConfigurationParser CreateParser(ConfigurationFileType configurationFileType)
     {
         return configurationFileType switch
         {
-            ConfigurationFileType.xml => CreateInstance<XmlConfigurationParser>(),
-            ConfigurationFileType.csv => CreateInstance<CsvConfigurationParser>(),
+            ConfigurationFileType.Xml => CreateInstance<XmlConfigurationParser>(),
+            ConfigurationFileType.Csv => CreateInstance<CsvConfigurationParser>(),
             _ => throw new Exception(string.Format(AllConsts.Errors.CantFindParserForThisConfigurationFormat,
                 configurationFileType.GetName()))
         };

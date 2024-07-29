@@ -5,7 +5,7 @@ namespace ConfigurationReader.Infrastructure.Enums;
 public enum ConfigurationFileType
 {
     [Description(".xml")]
-    xml,
+    Xml,
     [Description(".csv")]
-    csv
+    Csv
 }

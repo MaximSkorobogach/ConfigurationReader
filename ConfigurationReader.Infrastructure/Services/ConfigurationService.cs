@@ -3,7 +3,6 @@ using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace ConfigurationReader.Infrastructure.Services;
 

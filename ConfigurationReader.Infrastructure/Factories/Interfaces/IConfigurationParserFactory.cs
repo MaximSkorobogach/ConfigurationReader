@@ -1,9 +1,9 @@
 ﻿using ConfigurationReader.Infrastructure.Enums;
-using ConfigurationReader.Infrastructure.Parsers.Abstracts;
+using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 namespace ConfigurationReader.Infrastructure.Factories.Interfaces;
 
 public interface IConfigurationParserFactory
 {
-    BaseConfigurationParser CreateParser(ConfigurationFileType configurationFileType);
+    IConfigurationParser CreateParser(ConfigurationFileType configurationFileType);
 }

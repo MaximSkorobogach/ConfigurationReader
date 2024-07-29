@@ -1,5 +1,4 @@
-﻿using System.Text;
-using ConfigurationReader.Infrastructure.Consts;
+﻿using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Parsers;
 using ConfigurationReader.Tests.Services;

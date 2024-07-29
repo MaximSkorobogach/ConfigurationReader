@@ -3,7 +3,6 @@ using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace ConfigurationReader.Web.Controllers.api
 {

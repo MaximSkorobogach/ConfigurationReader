@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using ConfigurationReader.Infrastructure.Consts;
+﻿using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Enums;
 using ConfigurationReader.Infrastructure.Exceptions;

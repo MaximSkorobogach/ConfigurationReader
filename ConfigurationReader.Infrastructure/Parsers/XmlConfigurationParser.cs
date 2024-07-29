@@ -1,8 +1,5 @@
-﻿using System.Xml;
-using System.Xml.Serialization;
-using ConfigurationReader.Infrastructure.Consts;
+﻿using System.Xml.Serialization;
 using ConfigurationReader.Infrastructure.DTO;
-using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Parsers.Abstracts;
 using Microsoft.Extensions.Logging;
 

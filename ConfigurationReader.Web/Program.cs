@@ -1,11 +1,9 @@
 using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 using ConfigurationReader.Infrastructure.Factories;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Parsers;
-using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 namespace ConfigurationReader.Web
 {
