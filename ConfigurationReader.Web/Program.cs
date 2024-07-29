@@ -4,6 +4,7 @@ using System.Reflection;
 using ConfigurationReader.Infrastructure.Factories;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Parsers;
+using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 namespace ConfigurationReader.Web
 {
@@ -49,8 +50,8 @@ namespace ConfigurationReader.Web
         {
             serviceCollection.AddTransient<IFileService, FileService>();
             serviceCollection.AddTransient<IConfigurationService, ConfigurationService>();
-            serviceCollection.AddTransient(typeof(XmlConfigurationParser));
-            serviceCollection.AddTransient(typeof(CsvConfigurationParser));
+            serviceCollection.AddTransient<XmlConfigurationParser>();
+            serviceCollection.AddTransient<CsvConfigurationParser>();
         }
     }
 }

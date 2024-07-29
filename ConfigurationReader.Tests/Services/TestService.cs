@@ -35,9 +35,7 @@ namespace ConfigurationReader.Tests.Services
 
         public void AssertFileDto(FileDto expectedFile, FileDto resultFile)
         {
-            Assert.Equal(expectedFile.FileName, resultFile.FileName);
-            Assert.Equal(expectedFile.FileExtension, resultFile.FileExtension);
-            Assert.Equal(expectedFile.FilePath, resultFile.FilePath);
+            Assert.Equal(expectedFile, resultFile);
         }
 
         public string GetConfigFullPath(string configName)

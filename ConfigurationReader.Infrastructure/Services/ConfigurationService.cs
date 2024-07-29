@@ -35,25 +35,27 @@ public class ConfigurationService : IConfigurationService
         return await TryGetConfigurationFromFileAsync(file);
     }
 
-    private async Task<List<Configuration>> GetConfigurationsFromFilesAsync(List<FileDto> files, bool filesGetFromDirectoryPath = false)
+    private async Task<List<Configuration>> GetConfigurationsFromFilesAsync(List<FileDto> files,
+        bool filesGetFromDirectoryPath = false)
     {
         var configurations = new List<Configuration>();
         var tasks = files.Select(async file =>
         {
-            var configuration = await TryGetConfigurationFromFileAsync(file, ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
+            var configuration = await TryGetConfigurationFromFileAsync(file, 
+                ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
             return configuration;
         });
 
         var results = await Task.WhenAll(tasks);
 
-        configurations.AddRange(results.Where(config => config is not null));
+        configurations.AddRange(results.OfType<Configuration>());
 
         return configurations;
     }
 
     private async Task<Configuration?> TryGetConfigurationFromFileAsync(FileDto file, bool ignoreNotAvailableForParsing = false)
     {
-        Configuration configuration;
+        Configuration? configuration = null;
 
         try
         {
@@ -62,7 +64,7 @@ public class ConfigurationService : IConfigurationService
             if (configurationFileType is null)
             {
                 if (ignoreNotAvailableForParsing)
-                    return null;
+                    return configuration;
 
                 throw new Exception(AllConsts.Errors.FileFormatNotAvailableForParsing);
             }
