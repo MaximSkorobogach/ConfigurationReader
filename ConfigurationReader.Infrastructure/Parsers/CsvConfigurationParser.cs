@@ -29,7 +29,7 @@ namespace ConfigurationReader.Infrastructure.Parsers
                 configurations.Add(record);
             }
 
-            var configuration = configurations.FirstOrDefault();
+            var configuration = configurations.SingleOrDefault();
 
             return configuration;
         }
