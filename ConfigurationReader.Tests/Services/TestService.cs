@@ -1,11 +1,25 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.DTO;
+﻿using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Tests.Services.Interface;
+using Microsoft.Extensions.Configuration;
 
 namespace ConfigurationReader.Tests.Services
 { 
     public class TestService : ITestService
     {
+        private readonly string _testConfigurationsFileDirectory;
+
+        public TestService()
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            _testConfigurationsFileDirectory = 
+                configuration["TestSettings:TestConfigurationsFileDirectory"] 
+                ?? throw new InvalidOperationException();
+        }
+
         public void SetupTestDirectory(string directoryPath, string[] filePaths)
         {
             Directory.CreateDirectory(directoryPath);
@@ -43,10 +57,10 @@ namespace ConfigurationReader.Tests.Services
             string workingDirectory = Environment.CurrentDirectory;
 
             string projectDirectory = 
-                Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+                Directory.GetParent(workingDirectory)!.Parent!.Parent!.FullName;
 
             string testConfigFullPath = 
-                Path.Combine(projectDirectory, AllConsts.Tests.TestConfigurationsFileDirectory, configName);
+                Path.Combine(projectDirectory, _testConfigurationsFileDirectory, configName);
 
             return testConfigFullPath;
         }

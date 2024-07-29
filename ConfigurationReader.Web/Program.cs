@@ -4,15 +4,26 @@ using System.Reflection;
 using ConfigurationReader.Infrastructure.Factories;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Parsers;
-using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 namespace ConfigurationReader.Web
 {
+    /// <summary>
+    /// ¬ходна€ точка проекта, регистраци€ зависимостей
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();

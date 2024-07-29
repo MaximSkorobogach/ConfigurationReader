@@ -1,5 +1,4 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.DTO;
+﻿using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Enums;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
@@ -11,6 +10,7 @@ using ConfigurationReader.Tests.Services.Interface;
 using Microsoft.Extensions.Logging;
 using Moq;
 using ConfigurationReader.Infrastructure.Extensions;
+using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Tests.Tests.ServicesTests;
 
@@ -111,8 +111,8 @@ public class ConfigurationServiceTests
                 async () => await _configurationService.GetConfigurationFromFilesPaths(filesPaths));
 
         Assert.Equal(
-            string.Format(AllConsts.Errors.ParsingFileHasError, files.Last().FilePath,
-                AllConsts.Errors.FileFormatNotAvailableForParsing), exception.Message);
+            string.Format(ErrorMessages.ParsingFileHasError, files.Last().FilePath,
+                ErrorMessages.FileFormatNotAvailableForParsing), exception.Message);
 
         _testService.CleanupTestDirectory(directoryPath);
     }
@@ -149,7 +149,7 @@ public class ConfigurationServiceTests
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
 
         var filesPaths = new string[] { file.FilePath };
-        Configuration configuration = null;
+        Configuration configuration = null!;
 
         _testService.SetupTestDirectory(directoryPath, filesPaths);
 
@@ -158,6 +158,8 @@ public class ConfigurationServiceTests
         var result = await _configurationService.GetConfigurationFromFilePathAsync(file.FilePath);
 
         Assert.Null(result);
+
+        _testService.CleanupTestDirectory(directoryPath);
     }
 
     [Fact]
@@ -167,7 +169,6 @@ public class ConfigurationServiceTests
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
 
         var filesPaths = new string[] { file.FilePath };
-        Configuration configuration = null;
 
         _testService.SetupTestDirectory(directoryPath, filesPaths);
 
@@ -177,7 +178,7 @@ public class ConfigurationServiceTests
         parserCsvMock
             .Setup(p => p.ParseAsync(It.IsAny<byte[]>()))
             .Throws(() =>
-                new ParserAlgorithmException(AllConsts.Errors.HasErrorInParsingAlgorithm));
+                new ParserAlgorithmException(ErrorMessages.HasErrorInParsingAlgorithm));
 
         _mockConfigurationParserFactory
             .Setup(pf => pf.CreateParser(ConfigurationFileType.Csv))
@@ -188,8 +189,10 @@ public class ConfigurationServiceTests
                 async () => await _configurationService.GetConfigurationFromFilePathAsync(file.FilePath));
         
         Assert.Equal(
-            string.Format(AllConsts.Errors.ParsingFileHasError, file.FilePath,
-                AllConsts.Errors.HasErrorInParsingAlgorithm), exception.Message);
+            string.Format(ErrorMessages.ParsingFileHasError, file.FilePath,
+                ErrorMessages.HasErrorInParsingAlgorithm), exception.Message);
+
+        _testService.CleanupTestDirectory(directoryPath);
     }
 
     #endregion

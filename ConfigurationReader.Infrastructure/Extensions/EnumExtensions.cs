@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using ConfigurationReader.Infrastructure.Consts;
+using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Infrastructure.Extensions
 {
@@ -22,7 +22,7 @@ namespace ConfigurationReader.Infrastructure.Extensions
         {
             var fieldInfo = value.GetType().GetField(value.ToString());
 
-            var attributes = (IEnumerable<TAttribute>)fieldInfo.GetCustomAttributes(typeof(TAttribute), false);
+            var attributes = (IEnumerable<TAttribute>)fieldInfo!.GetCustomAttributes(typeof(TAttribute), false);
            
             return attributes;
         }
@@ -38,7 +38,7 @@ namespace ConfigurationReader.Infrastructure.Extensions
             var description = attributes.FirstOrDefault();
 
             if (description is null)
-                throw new NotSupportedException(string.Format(AllConsts.Errors.CantFindAttribute,
+                throw new NotSupportedException(string.Format(ErrorMessages.CantFindAttribute,
                     nameof(DescriptionAttribute), value));
                                                                                                                          
             return description.Description;

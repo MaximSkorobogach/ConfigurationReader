@@ -22,6 +22,6 @@ public static class ObjectExtensions
 
         return objectToCheck.GetType().GetProperties()
             .Where(x => x.PropertyType == typeof(string))
-            .All(pi => !string.IsNullOrWhiteSpace((string)pi.GetValue(objectToCheck)));
+            .All(pi => !string.IsNullOrWhiteSpace((string)pi.GetValue(objectToCheck)!));
     }
 }

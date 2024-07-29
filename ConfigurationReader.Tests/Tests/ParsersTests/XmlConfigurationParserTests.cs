@@ -1,6 +1,6 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.Exceptions;
+﻿using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Parsers;
+using ConfigurationReader.Infrastructure.Resources;
 using ConfigurationReader.Tests.Services;
 using ConfigurationReader.Tests.Services.Interface;
 using Microsoft.Extensions.Logging;
@@ -45,7 +45,7 @@ public class XmlConfigurationParserTests
             await Assert.ThrowsAsync<ParserAlgorithmException>(
                 async () => await _parser.ParseAsync(fileBytes));
 
-        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }
 
     [Fact]
@@ -59,6 +59,6 @@ public class XmlConfigurationParserTests
             await Assert.ThrowsAsync<ParserAlgorithmException>(
                 async () => await _parser.ParseAsync(fileBytes));
 
-        Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }
 }

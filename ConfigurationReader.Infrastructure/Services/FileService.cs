@@ -1,7 +1,7 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.Exceptions;
+using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Infrastructure.Services;
 
@@ -38,10 +38,10 @@ public class FileService : IFileService
     private void ThrowIfPathNotExisting(string path)
     {
         if (string.IsNullOrEmpty(path))
-            throw new PathException(AllConsts.Errors.PathIsNullOrEmpty);
+            throw new PathException(ErrorMessages.PathIsNullOrEmpty);
 
         if (!Path.Exists(path))
-            throw new PathException(string.Format(AllConsts.Errors.PathNotExists, path));
+            throw new PathException(string.Format(ErrorMessages.PathNotExists, path));
     }
 
     private FileDto CreateFileDtoFromFilePath(string filePath)

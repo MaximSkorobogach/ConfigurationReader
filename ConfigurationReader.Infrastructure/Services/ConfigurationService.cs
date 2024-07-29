@@ -1,7 +1,7 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.DTO;
+﻿using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
+using ConfigurationReader.Infrastructure.Resources;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 
 namespace ConfigurationReader.Infrastructure.Services;
@@ -66,7 +66,7 @@ public class ConfigurationService : IConfigurationService
                 if (ignoreNotAvailableForParsing)
                     return configuration;
 
-                throw new Exception(AllConsts.Errors.FileFormatNotAvailableForParsing);
+                throw new Exception(ErrorMessages.FileFormatNotAvailableForParsing);
             }
 
             var parser = _configurationParserFactory.CreateParser(configurationFileType.Value);
@@ -75,7 +75,7 @@ public class ConfigurationService : IConfigurationService
         }
         catch (Exception e)
         {
-            throw new Exception(string.Format(AllConsts.Errors.ParsingFileHasError, file.FilePath, e.Message));
+            throw new Exception(string.Format(ErrorMessages.ParsingFileHasError, file.FilePath, e.Message));
         }
 
         return configuration;

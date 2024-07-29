@@ -1,4 +1,4 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
+﻿using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Infrastructure.Factories.Abstracts;
 
@@ -15,10 +15,8 @@ public abstract class BaseFactory
     {
         var instanceType = typeof(TInstance);
 
-        var instance = (TInstance)_serviceProvider.GetService(instanceType);
-
-        if (instance is null)
-            throw new Exception(string.Format(AllConsts.Errors.CantCreateInstanceOfType, instanceType));
+        if (_serviceProvider.GetService(instanceType) is not TInstance instance)
+            throw new Exception(string.Format(ErrorMessages.CantCreateInstanceOfType, instanceType));
 
         return instance;
     }

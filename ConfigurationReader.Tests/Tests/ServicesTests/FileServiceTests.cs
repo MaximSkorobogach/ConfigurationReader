@@ -1,7 +1,7 @@
-using ConfigurationReader.Infrastructure.Consts;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Extensions;
+using ConfigurationReader.Infrastructure.Resources;
 using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
 using ConfigurationReader.Tests.Services;
@@ -46,16 +46,16 @@ public class FileServiceTests
         string directoryPath = "NonExistingDirectory".GetPlatformSpecificPath();
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
-        Assert.Equal(string.Format(AllConsts.Errors.PathNotExists, directoryPath), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.PathNotExists, directoryPath), exception.Message);
     }
 
     [Fact]
     public void GetAllFilesFromDirectoryPath_NullDirectoryPath_ThrowsPathException()
     {
-        string directoryPath = null;
+        string directoryPath = null!;
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class FileServiceTests
         string directoryPath = string.Empty;
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
     #endregion
 
@@ -104,16 +104,16 @@ public class FileServiceTests
         };
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filePaths));
-        Assert.Equal(string.Format(AllConsts.Errors.PathNotExists, filePaths.First()), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.PathNotExists, filePaths.First()), exception.Message);
     }
 
     [Fact]
     public void GetFilesFromFilesPaths_NullAnyPaths_ThrowsPathExceptions()
     {
-        string[] filesPaths = { null, "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath() };
+        string[] filesPaths = { null!, "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath() };
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filesPaths));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public class FileServiceTests
         string[] filesPaths = { "", "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath() };
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filesPaths));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
 
     #endregion
@@ -152,16 +152,16 @@ public class FileServiceTests
         string filePath = "NonExistingDirectory\\file1.txt".GetPlatformSpecificPath();
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath));
-        Assert.Equal(string.Format(AllConsts.Errors.PathNotExists, filePath), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.PathNotExists, filePath), exception.Message);
     }
 
     [Fact]
     public void GetFileFromFilePath_NullFilePath_ThrowsPathException()
     {
-        string filePath = null;
+        string? filePath = null;
 
-        var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath!));
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
 
     [Fact]
@@ -170,7 +170,7 @@ public class FileServiceTests
         string filePath = "";
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath));
-        Assert.Equal(AllConsts.Errors.PathIsNullOrEmpty, exception.Message);
+        Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
 
     #endregion

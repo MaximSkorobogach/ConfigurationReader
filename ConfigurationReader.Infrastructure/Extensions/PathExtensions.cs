@@ -1,7 +1,7 @@
-﻿using ConfigurationReader.Infrastructure.Consts;
-using ConfigurationReader.Infrastructure.DTO;
+﻿using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Enums;
 using ConfigurationReader.Infrastructure.Exceptions;
+using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Infrastructure.Extensions
 {
@@ -20,7 +20,7 @@ namespace ConfigurationReader.Infrastructure.Extensions
             ArgumentNullException.ThrowIfNull(fileDto);
 
             if (string.IsNullOrWhiteSpace(fileDto.FileExtension))
-                throw new PathException(AllConsts.Errors.ExtensionInFileDtoIsNullOrEmpty);
+                throw new PathException(ErrorMessages.ExtensionInFileDtoIsNullOrEmpty);
 
             return String.Equals(fileDto.FileExtension, configurationFileType.GetDescription(),
                 StringComparison.CurrentCultureIgnoreCase);
