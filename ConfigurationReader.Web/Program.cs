@@ -37,9 +37,9 @@ namespace ConfigurationReader.Web
                 options.IncludeXmlComments(xmlPath);
             });
 
-            ConfigureServices(builder.Services);
             ConfigureFactories(builder.Services);
             ConfigureParsers(builder.Services);
+            ConfigureServices(builder.Services);
 
             var app = builder.Build();
 
