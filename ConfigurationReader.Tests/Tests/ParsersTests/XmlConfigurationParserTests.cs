@@ -21,13 +21,13 @@ public class XmlConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_CorrectXmlConfig_ReturnsConfiguration()
+    public async Task GetConfigurationRecord_CorrectXmlConfig_ReturnsConfiguration()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("CorrectXmlConfig.xml");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var result = _parser.Parse(fileBytes);
+        var result = await _parser.ParseAsync(fileBytes);
 
         Assert.NotNull(result);
         Assert.Equal("Конфигурация 1", result.Name);
@@ -35,25 +35,29 @@ public class XmlConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_HalfFilledXmlConfig_ThrowsParserAlgorithmException()
+    public async Task GetConfigurationRecord_HalfFilledXmlConfig_ThrowsParserAlgorithmException()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("HalfFilledXmlConfig.xml");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
+        var exception = 
+            await Assert.ThrowsAsync<ParserAlgorithmException>(
+                async () => await _parser.ParseAsync(fileBytes));
 
         Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }
 
     [Fact]
-    public void GetConfigurationRecord_NotFilledXmlConfig_ThrowsParserAlgorithmException()
+    public async Task GetConfigurationRecord_NotFilledXmlConfig_ThrowsParserAlgorithmException()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("NotFilledXmlConfig.xml");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
+        var exception = 
+            await Assert.ThrowsAsync<ParserAlgorithmException>(
+                async () => await _parser.ParseAsync(fileBytes));
 
         Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
     }

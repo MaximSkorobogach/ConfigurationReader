@@ -17,7 +17,7 @@ public abstract class BaseConfigurationParser : IConfigurationParser
         _logger = logger;
     }
 
-    public virtual Configuration Parse(byte[] fileBytes)
+    public virtual async Task<Configuration> ParseAsync(byte[] fileBytes)
     {
         Configuration configuration;
         _logger.LogInformation(string.Format(AllConsts.Tracing.ParsingStarted, GetType().Name));
@@ -26,7 +26,7 @@ public abstract class BaseConfigurationParser : IConfigurationParser
 
         try
         {
-            configuration = GetConfigurationRecord(fileBytes);
+            configuration = await GetConfigurationRecordAsync(fileBytes);
         }
         catch (Exception e)
         {
@@ -51,5 +51,5 @@ public abstract class BaseConfigurationParser : IConfigurationParser
             throw new ParserAlgorithmException(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, GetType().Name));
     } 
 
-    protected abstract Configuration? GetConfigurationRecord(byte[] fileBytes);
+    protected abstract Task<Configuration?> GetConfigurationRecordAsync(byte[] fileBytes);
 }

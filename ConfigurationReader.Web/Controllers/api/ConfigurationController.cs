@@ -26,7 +26,7 @@ namespace ConfigurationReader.Web.Controllers.api
         [HttpGet]
         [Route("GetConfigurationsFromDirectoryPath")]
         [ProducesResponseType(typeof(List<Configuration>), 200)]
-        public IActionResult GetConfigurationsFromDirectoryPath(string directoryPath)
+        public async Task<IActionResult> GetConfigurationsFromDirectoryPath(string directoryPath)
         {
             _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationsFromDirectoryPath), directoryPath));
@@ -35,7 +35,7 @@ namespace ConfigurationReader.Web.Controllers.api
             try
             {
                 stopWatch.Start();
-                var configurations = _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
+                var configurations = await _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
                 stopWatch.Stop();
 
                 _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,
@@ -60,7 +60,7 @@ namespace ConfigurationReader.Web.Controllers.api
         [HttpGet]
         [Route("GetConfigurationFromFilesPaths")]
         [ProducesResponseType(typeof(List<Configuration>), 200)]
-        public IActionResult GetConfigurationFromFilesPaths(string[] filesPaths)
+        public async Task<IActionResult> GetConfigurationFromFilesPaths(string[] filesPaths)
         {
             _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationFromFilesPaths), string.Join("; ", filesPaths)));
@@ -69,7 +69,7 @@ namespace ConfigurationReader.Web.Controllers.api
             try
             {
                 stopWatch.Start();
-                var configurations = _configurationService.GetConfigurationFromFilesPaths(filesPaths);
+                var configurations = await _configurationService.GetConfigurationFromFilesPaths(filesPaths);
                 stopWatch.Stop();
 
                 _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,
@@ -94,7 +94,7 @@ namespace ConfigurationReader.Web.Controllers.api
         [HttpGet]
         [Route("GetConfigurationFromFilePath")]
         [ProducesResponseType(typeof(Configuration), 200)]
-        public IActionResult GetConfigurationFromFilePath(string filePath)
+        public async Task<IActionResult> GetConfigurationFromFilePath(string filePath)
         {
             _logger.LogInformation(string.Format(AllConsts.Tracing.MethodStarted,
                 nameof(GetConfigurationFromFilesPaths), filePath));
@@ -103,7 +103,7 @@ namespace ConfigurationReader.Web.Controllers.api
             try
             {
                 stopWatch.Start();
-                var configuration = _configurationService.GetConfigurationFromFilePath(filePath);
+                var configuration = await _configurationService.GetConfigurationFromFilePathAsync(filePath);
                 stopWatch.Stop();
 
                 _logger.LogInformation(string.Format(AllConsts.Tracing.MethodFinished,

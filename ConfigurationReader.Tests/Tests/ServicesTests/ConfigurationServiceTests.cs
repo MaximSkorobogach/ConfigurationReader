@@ -35,7 +35,7 @@ public class ConfigurationServiceTests
     #region GetConfigurationsFromDirectoryPath
 
     [Fact]
-    public void GetConfigurationsFromDirectoryPath_AllFilesCorrect_ReturnsConfigurations()
+    public async Task GetConfigurationsFromDirectoryPath_AllFilesCorrect_ReturnsConfigurations()
     {
         var directoryPath = "test_directory";
         var files = new List<FileDto>
@@ -51,7 +51,7 @@ public class ConfigurationServiceTests
 
         ConfigureMocks(configuration, directoryPath, files);
 
-        var result = _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
+        var result = await _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
@@ -64,7 +64,7 @@ public class ConfigurationServiceTests
     #region GetConfigurationFromFilesPaths
 
     [Fact]
-    public void GetConfigurationFromFilesPaths_AllFilesCorrect_ReturnsConfigurations()
+    public async Task GetConfigurationFromFilesPaths_AllFilesCorrect_ReturnsConfigurations()
     {
         var directoryPath = "test_directory";
         var files = new List<FileDto>
@@ -80,7 +80,7 @@ public class ConfigurationServiceTests
 
         ConfigureMocks(configuration, directoryPath, files);
 
-        var result = _configurationService.GetConfigurationFromFilesPaths(filesPaths);
+        var result = await _configurationService.GetConfigurationFromFilesPaths(filesPaths);
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
@@ -89,7 +89,7 @@ public class ConfigurationServiceTests
     }
 
     [Fact]
-    public void GetConfigurationFromFilesPaths_AnyFileNotSupported_ThrowsException()
+    public async Task GetConfigurationFromFilesPaths_AnyFileNotSupported_ThrowsException()
     {
         var directoryPath = "test_directory";
         var files = new List<FileDto>
@@ -107,7 +107,8 @@ public class ConfigurationServiceTests
         ConfigureMocks(configuration, directoryPath, files);
 
         var exception =
-            Assert.Throws<Exception>(() => _configurationService.GetConfigurationFromFilesPaths(filesPaths));
+            await Assert.ThrowsAsync<Exception>(
+                async () => await _configurationService.GetConfigurationFromFilesPaths(filesPaths));
 
         Assert.Equal(
             string.Format(AllConsts.Errors.ParsingFileHasError, files.Last().FilePath,
@@ -134,7 +135,7 @@ public class ConfigurationServiceTests
 
         ConfigureMocks(configuration, directoryPath, new List<FileDto>() { file });
 
-        var result = _configurationService.GetConfigurationFromFilePath(file.FilePath);
+        var result = _configurationService.GetConfigurationFromFilePathAsync(file.FilePath);
 
         Assert.NotNull(result);
 
@@ -142,7 +143,7 @@ public class ConfigurationServiceTests
     }
 
     [Fact]
-    public void GetConfigurationFromFilePath_NullConfiguration_ReturnsNull()
+    public async Task GetConfigurationFromFilePath_NullConfiguration_ReturnsNull()
     {
         var directoryPath = "test_directory";
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
@@ -154,13 +155,13 @@ public class ConfigurationServiceTests
 
         ConfigureMocks(configuration, directoryPath, new List<FileDto>(){ file });
 
-        var result = _configurationService.GetConfigurationFromFilePath(file.FilePath);
+        var result = await _configurationService.GetConfigurationFromFilePathAsync(file.FilePath);
 
         Assert.Null(result);
     }
 
     [Fact]
-    public void GetConfigurationFromFilePath_ParserThrowsException_ThrowsException()
+    public async Task GetConfigurationFromFilePath_ParserThrowsException_ThrowsException()
     {
         var directoryPath = "test_directory";
         var file = new FileDto("file1.csv", ".csv", $"{directoryPath}\\file1.csv".GetPlatformSpecificPath());
@@ -174,7 +175,7 @@ public class ConfigurationServiceTests
 
         var parserCsvMock = new Mock<CsvConfigurationParser>(_mockCsvLogger.Object);
         parserCsvMock
-            .Setup(p => p.Parse(It.IsAny<byte[]>()))
+            .Setup(p => p.ParseAsync(It.IsAny<byte[]>()))
             .Throws(() =>
                 new ParserAlgorithmException(AllConsts.Errors.HasErrorInParsingAlgorithm));
 
@@ -183,7 +184,8 @@ public class ConfigurationServiceTests
             .Returns(parserCsvMock.Object);
 
         var exception =
-            Assert.Throws<Exception>(() => _configurationService.GetConfigurationFromFilePath(file.FilePath));
+            await Assert.ThrowsAsync<Exception>(
+                async () => await _configurationService.GetConfigurationFromFilePathAsync(file.FilePath));
         
         Assert.Equal(
             string.Format(AllConsts.Errors.ParsingFileHasError, file.FilePath,
@@ -204,10 +206,10 @@ public class ConfigurationServiceTests
     private void ConfigureParserMocks(Configuration configuration)
     {
         var parserCsvMock = new Mock<CsvConfigurationParser>(_mockCsvLogger.Object);
-        parserCsvMock.Setup(p => p.Parse(It.IsAny<byte[]>())).Returns(configuration);
+        parserCsvMock.Setup(p => p.ParseAsync(It.IsAny<byte[]>())).ReturnsAsync(configuration);
 
         var parserXmlMock = new Mock<CsvConfigurationParser>(_mockCsvLogger.Object);
-        parserXmlMock.Setup(p => p.Parse(It.IsAny<byte[]>())).Returns(configuration);
+        parserXmlMock.Setup(p => p.ParseAsync(It.IsAny<byte[]>())).ReturnsAsync(configuration);
 
         _mockConfigurationParserFactory
             .Setup(pf => pf.CreateParser(ConfigurationFileType.Csv))

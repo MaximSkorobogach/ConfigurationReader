@@ -4,5 +4,5 @@ namespace ConfigurationReader.Infrastructure.Parsers.Interfaces;
 
 public interface IConfigurationParser
 {
-    Configuration Parse(byte[] fileBytes);
+    Task<Configuration> ParseAsync(byte[] fileBytes);
 }

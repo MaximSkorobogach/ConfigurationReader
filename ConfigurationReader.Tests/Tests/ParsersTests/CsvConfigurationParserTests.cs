@@ -21,13 +21,13 @@ public class CsvConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_CorrectCsvConfig_ReturnsConfiguration()
+    public async Task GetConfigurationRecord_CorrectCsvConfig_ReturnsConfiguration()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("CorrectCsvConfig.csv");
 
         var fileBytes = File.ReadAllBytes(testConfigFullPath);
 
-        var result = _parser.Parse(fileBytes);
+        var result = await _parser.ParseAsync(fileBytes);
 
         Assert.NotNull(result);
         Assert.Equal("Конфигурация 2", result.Name);
@@ -35,25 +35,29 @@ public class CsvConfigurationParserTests
     }
 
     [Fact]
-    public void GetConfigurationRecord_HalfFilledCsvConfig_ThrowsParserAlgorithmException()
+    public async Task GetConfigurationRecord_HalfFilledCsvConfig_ThrowsParserAlgorithmException()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("HalfFilledCsvConfig.csv");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
+        var exception =
+            await Assert.ThrowsAsync<ParserAlgorithmException>(
+                async () => await _parser.ParseAsync(fileBytes));
 
         Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNotFilled, nameof(CsvConfigurationParser)), exception.Message);
     }
 
     [Fact]
-    public void GetConfigurationRecord_NotFilledCsvConfig_ThrowsParserAlgorithmException()
+    public async Task GetConfigurationRecord_NotFilledCsvConfig_ThrowsParserAlgorithmException()
     {
         var testConfigFullPath = _testService.GetConfigFullPath("NotFilledCsvConfig.csv");
 
-        var fileBytes = File.ReadAllBytes(testConfigFullPath);
+        var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = Assert.Throws<ParserAlgorithmException>(() => _parser.Parse(fileBytes));
+        var exception = 
+            await Assert.ThrowsAsync<ParserAlgorithmException>(
+                async () => await _parser.ParseAsync(fileBytes));
 
         Assert.Equal(string.Format(AllConsts.Errors.CreatedConfigurationIsNull, nameof(CsvConfigurationParser)), exception.Message);
     }

@@ -17,41 +17,41 @@ public class ConfigurationService : IConfigurationService
         _configurationParserFactory = configurationParserFactory;
     }
 
-    public List<Configuration> GetConfigurationsFromDirectoryPath(string directoryPath)
+    public async Task<List<Configuration>> GetConfigurationsFromDirectoryPath(string directoryPath)
     {
         var files = _fileService.GetFilesFromDirectoryPath(directoryPath);
-        return GetConfigurationsFromFiles(files, filesGetFromDirectoryPath: true);
+        return await GetConfigurationsFromFilesAsync(files, filesGetFromDirectoryPath: true);
     }
 
-    public List<Configuration> GetConfigurationFromFilesPaths(string[] filesPaths)
+    public async Task<List<Configuration>> GetConfigurationFromFilesPaths(string[] filesPaths)
     {
         var files = _fileService.GetFilesFromFilesPaths(filesPaths);
-        return GetConfigurationsFromFiles(files);
+        return await GetConfigurationsFromFilesAsync(files);
     }
 
-    public Configuration? GetConfigurationFromFilePath(string filePath)
+    public async Task<Configuration?> GetConfigurationFromFilePathAsync(string filePath)
     {
         var file = _fileService.GetFileFromFilePath(filePath);
-        return TryGetConfigurationFromFile(file);
+        return await TryGetConfigurationFromFileAsync(file);
     }
 
-    private List<Configuration> GetConfigurationsFromFiles(List<FileDto> files, bool filesGetFromDirectoryPath = false)
+    private async Task<List<Configuration>> GetConfigurationsFromFilesAsync(List<FileDto> files, bool filesGetFromDirectoryPath = false)
     {
         var configurations = new List<Configuration>();
-
-        files.ForEach(file =>
+        var tasks = files.Select(async file =>
         {
-            var configuration = TryGetConfigurationFromFile(file, 
-                ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
-
-            if (configuration is not null)
-                configurations.Add(configuration);
+            var configuration = await TryGetConfigurationFromFileAsync(file, ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
+            return configuration;
         });
+
+        var results = await Task.WhenAll(tasks);
+
+        configurations.AddRange(results.Where(config => config is not null));
 
         return configurations;
     }
 
-    private Configuration? TryGetConfigurationFromFile(FileDto file, bool ignoreNotAvailableForParsing = false)
+    private async Task<Configuration?> TryGetConfigurationFromFileAsync(FileDto file, bool ignoreNotAvailableForParsing = false)
     {
         Configuration configuration;
 
@@ -68,8 +68,8 @@ public class ConfigurationService : IConfigurationService
             }
 
             var parser = _configurationParserFactory.CreateParser(configurationFileType.Value);
-            var fileBytes = File.ReadAllBytes(file.FilePath);
-            configuration = parser.Parse(fileBytes);
+            var fileBytes = await File.ReadAllBytesAsync(file.FilePath);
+            configuration = await parser.ParseAsync(fileBytes);
         }
         catch (Exception e)
         {
