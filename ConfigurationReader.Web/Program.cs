@@ -39,6 +39,7 @@ namespace ConfigurationReader.Web
 
             ConfigureServices(builder.Services);
             ConfigureFactories(builder.Services);
+            ConfigureParsers(builder.Services);
 
             var app = builder.Build();
 
@@ -52,17 +53,21 @@ namespace ConfigurationReader.Web
             app.Run();
         }
 
-        private static void ConfigureFactories(IServiceCollection builderServices)
+        private static void ConfigureParsers(IServiceCollection builderServices)
         {
-            builderServices.AddTransient<IConfigurationParserFactory, ConfigurationParserFactory>();
+            builderServices.AddTransient<XmlConfigurationParser>();
+            builderServices.AddTransient<CsvConfigurationParser>();
         }
 
-        private static void ConfigureServices(IServiceCollection serviceCollection)
+        private static void ConfigureFactories(IServiceCollection builderServices)
         {
-            serviceCollection.AddTransient<IFileService, FileService>();
-            serviceCollection.AddTransient<IConfigurationService, ConfigurationService>();
-            serviceCollection.AddTransient<XmlConfigurationParser>();
-            serviceCollection.AddTransient<CsvConfigurationParser>();
+            builderServices.AddSingleton<IConfigurationParserFactory, ConfigurationParserFactory>();
+        }
+
+        private static void ConfigureServices(IServiceCollection builderServices)
+        {
+            builderServices.AddScoped<IFileService, FileService>();
+            builderServices.AddScoped<IConfigurationService, ConfigurationService>();
         }
     }
 }
