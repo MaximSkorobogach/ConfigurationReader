@@ -8,12 +8,9 @@ using ConfigurationReader.Infrastructure.Resources;
 
 namespace ConfigurationReader.Infrastructure.Factories;
 
-public class ConfigurationParserFactory : BaseFactory, IConfigurationParserFactory
+internal class ConfigurationParserFactory(IServiceProvider serviceProvider)
+    : BaseFactory(serviceProvider), IConfigurationParserFactory
 {
-    public ConfigurationParserFactory(IServiceProvider serviceProvider) : base(serviceProvider)
-    {
-    }
-
     public IConfigurationParser CreateParser(ConfigurationFileType configurationFileType)
     {
         return configurationFileType switch

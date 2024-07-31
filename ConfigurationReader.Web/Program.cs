@@ -1,73 +1,46 @@
-using ConfigurationReader.Infrastructure.Services;
-using ConfigurationReader.Infrastructure.Services.Interfaces;
 using System.Reflection;
-using ConfigurationReader.Infrastructure.Factories;
-using ConfigurationReader.Infrastructure.Factories.Interfaces;
-using ConfigurationReader.Infrastructure.Parsers;
+using ConfigurationReader.Infrastructure.DI;
 
-namespace ConfigurationReader.Web
+namespace ConfigurationReader.Web;
+
+/// <summary>
+///     ¬ходна€ точка проекта, регистраци€ зависимостей
+/// </summary>
+public class Program
 {
     /// <summary>
-    /// ¬ходна€ точка проекта, регистраци€ зависимостей
     /// </summary>
-    public class Program
+    /// <param name="args"></param>
+    public static void Main(string[] args)
     {
-        /// <summary>
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", true, true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+            .AddEnvironmentVariables();
+
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen(options =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+        });
 
-            builder.Configuration
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+        builder.Services.AddInfrastructure();
 
-            builder.Logging.ClearProviders();
-            builder.Logging.AddConsole();
+        var app = builder.Build();
 
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
-            {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-            });
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
-            ConfigureFactories(builder.Services);
-            ConfigureParsers(builder.Services);
-            ConfigureServices(builder.Services);
+        app.UseAuthorization();
 
-            var app = builder.Build();
+        app.MapControllers();
 
-            app.UseSwagger(); 
-            app.UseSwaggerUI();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
-        }
-
-        private static void ConfigureParsers(IServiceCollection builderServices)
-        {
-            builderServices.AddTransient<XmlConfigurationParser>();
-            builderServices.AddTransient<CsvConfigurationParser>();
-        }
-
-        private static void ConfigureFactories(IServiceCollection builderServices)
-        {
-            builderServices.AddSingleton<IConfigurationParserFactory, ConfigurationParserFactory>();
-        }
-
-        private static void ConfigureServices(IServiceCollection builderServices)
-        {
-            builderServices.AddScoped<IFileService, FileService>();
-            builderServices.AddScoped<IConfigurationService, ConfigurationService>();
-        }
+        app.Run();
     }
 }

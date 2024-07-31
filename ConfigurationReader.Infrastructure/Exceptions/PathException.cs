@@ -1,8 +1,3 @@
 ﻿namespace ConfigurationReader.Infrastructure.Exceptions;
 
-public class PathException : Exception
-{
-    public PathException(string message) : base(message)
-    {
-    }
-}
+public class PathException(string message) : Exception(message);

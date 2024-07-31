@@ -1,47 +1,46 @@
 ﻿using System.ComponentModel;
 using ConfigurationReader.Infrastructure.Resources;
 
-namespace ConfigurationReader.Infrastructure.Extensions
+namespace ConfigurationReader.Infrastructure.Extensions;
+
+public static class EnumExtensions
 {
-    public static class EnumExtensions
+    /// <summary>
+    ///     Получить название объекта перечисления
+    /// </summary>
+    public static string? GetName<TEnum>(this TEnum enumValue) where TEnum : Enum
     {
-        /// <summary>
-        /// Получить название объекта перечисления
-        /// </summary>
-        public static string? GetName<TEnum>(this TEnum enumValue) where TEnum : Enum
-        {
-            return Enum.GetName(typeof(TEnum), enumValue);
-        }
+        return Enum.GetName(typeof(TEnum), enumValue);
+    }
 
-        /// <summary>
-        /// Получить аттрибут объекта перечисления
-        /// </summary>
-        private static IEnumerable<TAttribute> GetAttributes<TAttribute, TEnum>(this TEnum value)
-            where TAttribute : Attribute
-            where TEnum : Enum
-        {
-            var fieldInfo = value.GetType().GetField(value.ToString());
+    /// <summary>
+    ///     Получить аттрибут объекта перечисления
+    /// </summary>
+    private static IEnumerable<TAttribute> GetAttributes<TAttribute, TEnum>(this TEnum value)
+        where TAttribute : Attribute
+        where TEnum : Enum
+    {
+        var fieldInfo = value.GetType().GetField(value.ToString());
 
-            var attributes = (IEnumerable<TAttribute>)fieldInfo!.GetCustomAttributes(typeof(TAttribute), false);
-           
-            return attributes;
-        }
+        var attributes = (IEnumerable<TAttribute>)fieldInfo!.GetCustomAttributes(typeof(TAttribute), false);
 
-        /// <summary>
-        /// Получить описание объекта перечисления из аттрибута <see cref="DescriptionAttribute"/>
-        /// </summary>
-        public static string GetDescription<TEnum>(this TEnum value)
-            where TEnum : struct, Enum
-        {
-            var attributes = value.GetAttributes<DescriptionAttribute, TEnum>().ToArray();
+        return attributes;
+    }
 
-            var description = attributes.FirstOrDefault();
+    /// <summary>
+    ///     Получить описание объекта перечисления из аттрибута <see cref="DescriptionAttribute" />
+    /// </summary>
+    public static string GetDescription<TEnum>(this TEnum value)
+        where TEnum : struct, Enum
+    {
+        var attributes = value.GetAttributes<DescriptionAttribute, TEnum>().ToArray();
 
-            if (description is null)
-                throw new NotSupportedException(string.Format(ErrorMessages.CantFindAttribute,
-                    nameof(DescriptionAttribute), value));
-                                                                                                                         
-            return description.Description;
-        }
+        var description = attributes.FirstOrDefault();
+
+        if (description is null)
+            throw new NotSupportedException(string.Format(ErrorMessages.CantFindAttribute,
+                nameof(DescriptionAttribute), value));
+
+        return description.Description;
     }
 }
