@@ -1,23 +1,22 @@
-﻿using ConfigurationReader.Infrastructure.Exceptions;
-using ConfigurationReader.Infrastructure.Parsers;
+﻿using ConfigurationReader.Infrastructure.Enums;
+using ConfigurationReader.Infrastructure.Exceptions;
+using ConfigurationReader.Infrastructure.Factories.Interfaces;
+using ConfigurationReader.Infrastructure.Parsers.Interfaces;
 using ConfigurationReader.Infrastructure.Resources;
-using ConfigurationReader.Tests.Services;
+using ConfigurationReader.Tests.DI;
 using ConfigurationReader.Tests.Services.Interface;
-using Microsoft.Extensions.Logging;
-using Moq;
 
 namespace ConfigurationReader.Tests.Tests.ParsersTests;
 
 public class XmlConfigurationParserTests
 {
-    private readonly Mock<ILogger<XmlConfigurationParser>> _loggerMock;
-    private readonly XmlConfigurationParser _parser;
-    private readonly ITestService _testService = new TestService();
+    private readonly IConfigurationParser _parser;
+    private readonly ITestService _testService = Resolver.Resolve<ITestService>();
 
     public XmlConfigurationParserTests()
     {
-        _loggerMock = new Mock<ILogger<XmlConfigurationParser>>();
-        _parser = new XmlConfigurationParser(_loggerMock.Object);
+        var configurationParserFactory = Resolver.Resolve<IConfigurationParserFactory>();
+        _parser = configurationParserFactory.CreateParser(ConfigurationFileType.Xml);
     }
 
     [Fact]
@@ -41,11 +40,12 @@ public class XmlConfigurationParserTests
 
         var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = 
+        var exception =
             await Assert.ThrowsAsync<ParserAlgorithmException>(
                 async () => await _parser.ParseAsync(fileBytes));
 
-        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, _parser.GetType().Name),
+            exception.Message);
     }
 
     [Fact]
@@ -55,10 +55,11 @@ public class XmlConfigurationParserTests
 
         var fileBytes = await File.ReadAllBytesAsync(testConfigFullPath);
 
-        var exception = 
+        var exception =
             await Assert.ThrowsAsync<ParserAlgorithmException>(
                 async () => await _parser.ParseAsync(fileBytes));
 
-        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, nameof(XmlConfigurationParser)), exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, _parser.GetType().Name),
+            exception.Message);
     }
 }

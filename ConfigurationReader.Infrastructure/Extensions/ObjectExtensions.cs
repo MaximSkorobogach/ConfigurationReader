@@ -3,7 +3,7 @@
 public static class ObjectExtensions
 {
     /// <summary>
-    /// Все свойства объекта не null
+    ///     Все свойства объекта не null
     /// </summary>
     public static bool AllPropertiesIsNotNull(this object objectToCheck)
     {
@@ -14,7 +14,7 @@ public static class ObjectExtensions
     }
 
     /// <summary>
-    /// Все <see cref="string"/> свойства объекта заполнены
+    ///     Все <see cref="string" /> свойства объекта заполнены
     /// </summary>
     public static bool AllStringPropertiesIsNotEmpty(this object objectToCheck)
     {

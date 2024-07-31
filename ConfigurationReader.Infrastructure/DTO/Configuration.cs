@@ -1,8 +1,7 @@
-﻿namespace ConfigurationReader.Infrastructure.DTO
+﻿namespace ConfigurationReader.Infrastructure.DTO;
+
+public class Configuration
 {
-    public class Configuration
-    {
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-    }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
 }

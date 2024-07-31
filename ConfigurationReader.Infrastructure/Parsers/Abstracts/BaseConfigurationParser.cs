@@ -8,19 +8,12 @@ using Microsoft.Extensions.Logging;
 
 namespace ConfigurationReader.Infrastructure.Parsers.Abstracts;
 
-public abstract class BaseConfigurationParser : IConfigurationParser
+internal abstract class BaseConfigurationParser(ILogger<BaseConfigurationParser> logger) : IConfigurationParser
 {
-    private readonly ILogger<BaseConfigurationParser> _logger;
-
-    protected BaseConfigurationParser(ILogger<BaseConfigurationParser> logger)
-    {
-        _logger = logger;
-    }
-
     public virtual async Task<Configuration> ParseAsync(byte[] fileBytes)
     {
         Configuration? configuration;
-        _logger.LogInformation(string.Format(TracingMessages.ParsingStarted, GetType().Name));
+        logger.LogInformation(string.Format(TracingMessages.ParsingStarted, GetType().Name));
         var stopWatch = new Stopwatch();
         stopWatch.Start();
 
@@ -37,7 +30,7 @@ public abstract class BaseConfigurationParser : IConfigurationParser
         ValidateConfiguration(configuration);
 
         stopWatch.Stop();
-        _logger.LogInformation(string.Format(TracingMessages.ParsingFinished, GetType().Name, stopWatch.Elapsed));
+        logger.LogInformation(string.Format(TracingMessages.ParsingFinished, GetType().Name, stopWatch.Elapsed));
 
         return configuration!;
     }
@@ -48,8 +41,9 @@ public abstract class BaseConfigurationParser : IConfigurationParser
             throw new ParserAlgorithmException(string.Format(ErrorMessages.CreatedConfigurationIsNull, GetType().Name));
 
         if (!configuration.AllStringPropertiesIsNotEmpty() || !configuration.AllPropertiesIsNotNull())
-            throw new ParserAlgorithmException(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled, GetType().Name));
-    } 
+            throw new ParserAlgorithmException(string.Format(ErrorMessages.CreatedConfigurationIsNotFilled,
+                GetType().Name));
+    }
 
     protected abstract Task<Configuration?> GetConfigurationRecordAsync(byte[] fileBytes);
 }

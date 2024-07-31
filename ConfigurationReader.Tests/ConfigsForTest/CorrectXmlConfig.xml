@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <Configuration>
-<Name>Конфигурация 1</Name>
-<Description>Описание Конфигурации 1</Description>
+  <Name>Конфигурация 1</Name>
+  <Description>Описание Конфигурации 1</Description>
 </Configuration>

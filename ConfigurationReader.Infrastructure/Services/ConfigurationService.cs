@@ -6,32 +6,24 @@ using ConfigurationReader.Infrastructure.Services.Interfaces;
 
 namespace ConfigurationReader.Infrastructure.Services;
 
-public class ConfigurationService : IConfigurationService
+internal class ConfigurationService(IFileService fileService, IConfigurationParserFactory configurationParserFactory)
+    : IConfigurationService
 {
-    private readonly IFileService _fileService;
-    private readonly IConfigurationParserFactory _configurationParserFactory;
-
-    public ConfigurationService(IFileService fileService, IConfigurationParserFactory configurationParserFactory)
-    {
-        _fileService = fileService;
-        _configurationParserFactory = configurationParserFactory;
-    }
-
     public async Task<List<Configuration>> GetConfigurationsFromDirectoryPath(string directoryPath)
     {
-        var files = _fileService.GetFilesFromDirectoryPath(directoryPath);
-        return await GetConfigurationsFromFilesAsync(files, filesGetFromDirectoryPath: true);
+        var files = fileService.GetFilesFromDirectoryPath(directoryPath);
+        return await GetConfigurationsFromFilesAsync(files, true);
     }
 
     public async Task<List<Configuration>> GetConfigurationFromFilesPaths(string[] filesPaths)
     {
-        var files = _fileService.GetFilesFromFilesPaths(filesPaths);
+        var files = fileService.GetFilesFromFilesPaths(filesPaths);
         return await GetConfigurationsFromFilesAsync(files);
     }
 
     public async Task<Configuration?> GetConfigurationFromFilePathAsync(string filePath)
     {
-        var file = _fileService.GetFileFromFilePath(filePath);
+        var file = fileService.GetFileFromFilePath(filePath);
         return await TryGetConfigurationFromFileAsync(file);
     }
 
@@ -41,8 +33,8 @@ public class ConfigurationService : IConfigurationService
         var configurations = new List<Configuration>();
         var tasks = files.Select(async file =>
         {
-            var configuration = await TryGetConfigurationFromFileAsync(file, 
-                ignoreNotAvailableForParsing: filesGetFromDirectoryPath);
+            var configuration = await TryGetConfigurationFromFileAsync(file,
+                filesGetFromDirectoryPath);
             return configuration;
         });
 
@@ -53,7 +45,8 @@ public class ConfigurationService : IConfigurationService
         return configurations;
     }
 
-    private async Task<Configuration?> TryGetConfigurationFromFileAsync(FileDto file, bool ignoreNotAvailableForParsing = false)
+    private async Task<Configuration?> TryGetConfigurationFromFileAsync(FileDto file,
+        bool ignoreNotAvailableForParsing = false)
     {
         Configuration? configuration = null;
 
@@ -69,7 +62,7 @@ public class ConfigurationService : IConfigurationService
                 throw new Exception(ErrorMessages.FileFormatNotAvailableForParsing);
             }
 
-            var parser = _configurationParserFactory.CreateParser(configurationFileType.Value);
+            var parser = configurationParserFactory.CreateParser(configurationFileType.Value);
             var fileBytes = await File.ReadAllBytesAsync(file.FilePath);
             configuration = await parser.ParseAsync(fileBytes);
         }

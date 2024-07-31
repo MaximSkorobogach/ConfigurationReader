@@ -1,7 +1,7 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
-using ConfigurationReader.Infrastructure.Services.Interfaces;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Resources;
+using ConfigurationReader.Infrastructure.Services.Interfaces;
 
 namespace ConfigurationReader.Infrastructure.Services;
 
@@ -22,7 +22,11 @@ public class FileService : IFileService
     {
         var files =
             filesPaths
-                .Select(GetFileFromFilePath)
+                .Select(f =>
+                {
+                    ThrowIfPathNotExisting(f);
+                    return GetFileFromFilePath(f);
+                })
                 .ToList();
 
         return files;

@@ -2,33 +2,32 @@ using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Resources;
-using ConfigurationReader.Infrastructure.Services;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
-using ConfigurationReader.Tests.Services;
+using ConfigurationReader.Tests.DI;
 using ConfigurationReader.Tests.Services.Interface;
 
 namespace ConfigurationReader.Tests.Tests.ServicesTests;
 
 public class FileServiceTests
 {
-    private readonly IFileService _fileService = new FileService();
-    private readonly ITestService _testService = new TestService();
+    private readonly IFileService _fileService = Resolver.Resolve<IFileService>();
+    private readonly ITestService _testService = Resolver.Resolve<ITestService>();
 
     #region GetFilesFromDirectoryPath
 
     [Fact]
     public void GetAllFilesFromDirectoryPath_ExistDirectoryPath_ReturnsFiles()
     {
-        string directoryPath = "TestDirectory";
+        var directoryPath = "TestDirectory";
         string[] filePaths =
-        {
-            "TestDirectory\\file1.txt".GetPlatformSpecificPath(), 
+        [
+            "TestDirectory\\file1.txt".GetPlatformSpecificPath(),
             "TestDirectory\\file2.txt".GetPlatformSpecificPath()
-        };
+        ];
         var expectedFiles = new List<FileDto>
         {
-            new FileDto(Path.GetFileName(filePaths[0]), Path.GetExtension(filePaths[0]), filePaths[0]),
-            new FileDto(Path.GetFileName(filePaths[1]), Path.GetExtension(filePaths[1]), filePaths[1])
+            new(Path.GetFileName(filePaths[0]), Path.GetExtension(filePaths[0]), filePaths[0]),
+            new(Path.GetFileName(filePaths[1]), Path.GetExtension(filePaths[1]), filePaths[1])
         };
 
         _testService.SetupTestDirectory(directoryPath, filePaths);
@@ -43,7 +42,7 @@ public class FileServiceTests
     [Fact]
     public void GetAllFilesFromDirectoryPath_NotExistDirectoryPath_ThrowsPathException()
     {
-        string directoryPath = "NonExistingDirectory".GetPlatformSpecificPath();
+        var directoryPath = "NonExistingDirectory".GetPlatformSpecificPath();
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
         Assert.Equal(string.Format(ErrorMessages.PathNotExists, directoryPath), exception.Message);
@@ -61,11 +60,12 @@ public class FileServiceTests
     [Fact]
     public void GetAllFilesFromDirectoryPath_EmptyDirectoryPath_ThrowsPathException()
     {
-        string directoryPath = string.Empty;
+        var directoryPath = string.Empty;
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromDirectoryPath(directoryPath));
         Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
     }
+
     #endregion
 
     #region GetFilesFromFilesPaths
@@ -73,16 +73,16 @@ public class FileServiceTests
     [Fact]
     public void GetFilesFromFilesPaths_ExistsFilesPaths_ReturnsFiles()
     {
-        string directoryPath = "TestDirectory";
+        var directoryPath = "TestDirectory";
         string[] filesPaths =
-        {
-            "TestDirectory\\file1.txt".GetPlatformSpecificPath(), 
+        [
+            "TestDirectory\\file1.txt".GetPlatformSpecificPath(),
             "TestDirectory\\file2.txt".GetPlatformSpecificPath()
-        };
+        ];
         var expectedFiles = new List<FileDto>
         {
-            new FileDto(Path.GetFileName(filesPaths[0]), Path.GetExtension(filesPaths[0]), filesPaths[0]),
-            new FileDto(Path.GetFileName(filesPaths[1]), Path.GetExtension(filesPaths[1]), filesPaths[1])
+            new(Path.GetFileName(filesPaths[0]), Path.GetExtension(filesPaths[0]), filesPaths[0]),
+            new(Path.GetFileName(filesPaths[1]), Path.GetExtension(filesPaths[1]), filesPaths[1])
         };
 
         _testService.SetupTestDirectory(directoryPath, filesPaths);
@@ -98,10 +98,10 @@ public class FileServiceTests
     public void GetFilesFromFilesPaths_NotExistsAnyPath_ThrowsPathException()
     {
         string[] filePaths =
-        {
+        [
             "NonExistingDirectory\\file1.txt".GetPlatformSpecificPath(),
             "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath()
-        };
+        ];
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filePaths));
         Assert.Equal(string.Format(ErrorMessages.PathNotExists, filePaths.First()), exception.Message);
@@ -110,7 +110,7 @@ public class FileServiceTests
     [Fact]
     public void GetFilesFromFilesPaths_NullAnyPaths_ThrowsPathExceptions()
     {
-        string[] filesPaths = { null!, "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath() };
+        string[] filesPaths = [null!, "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath()];
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filesPaths));
         Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
@@ -119,7 +119,7 @@ public class FileServiceTests
     [Fact]
     public void GetFilesFromFilesPaths_EmptyAnyPaths_ThrowsPathException()
     {
-        string[] filesPaths = { "", "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath() };
+        string[] filesPaths = ["", "NonExistingDirectory\\file2.txt".GetPlatformSpecificPath()];
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFilesFromFilesPaths(filesPaths));
         Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
@@ -132,12 +132,12 @@ public class FileServiceTests
     [Fact]
     public void GetFileFromFilePath_ExistFilePath_ReturnsFile()
     {
-        string directoryPath = "TestDirectory";
-        string filePath = "TestDirectory\\file1.txt".GetPlatformSpecificPath();
-        var expectedFile = 
+        var directoryPath = "TestDirectory";
+        var filePath = "TestDirectory\\file1.txt".GetPlatformSpecificPath();
+        var expectedFile =
             new FileDto(Path.GetFileName(filePath), Path.GetExtension(filePath), filePath);
 
-        _testService.SetupTestDirectory(directoryPath, new[] { filePath });
+        _testService.SetupTestDirectory(directoryPath, [filePath]);
 
         var result = _fileService.GetFileFromFilePath(filePath);
 
@@ -149,7 +149,7 @@ public class FileServiceTests
     [Fact]
     public void GetFileFromFilePath_NotExistFilePath_ThrowsPathException()
     {
-        string filePath = "NonExistingDirectory\\file1.txt".GetPlatformSpecificPath();
+        var filePath = "NonExistingDirectory\\file1.txt".GetPlatformSpecificPath();
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath));
         Assert.Equal(string.Format(ErrorMessages.PathNotExists, filePath), exception.Message);
@@ -167,7 +167,7 @@ public class FileServiceTests
     [Fact]
     public void GetFileFromFilePath_EmptyFilePath_ThrowsPathException()
     {
-        string filePath = "";
+        var filePath = "";
 
         var exception = Assert.Throws<PathException>(() => _fileService.GetFileFromFilePath(filePath));
         Assert.Equal(ErrorMessages.PathIsNullOrEmpty, exception.Message);
