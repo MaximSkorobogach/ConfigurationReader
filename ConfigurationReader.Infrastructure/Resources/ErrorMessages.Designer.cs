@@ -61,7 +61,7 @@ namespace ConfigurationReader.Infrastructure.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Возникли следующие ошибки:.
+        ///   Ищет локализованную строку, похожую на При обработке массива файлов возникли следующие ошибки:.
         /// </summary>
         public static string ArrayFilesHaveErrors {
             get {

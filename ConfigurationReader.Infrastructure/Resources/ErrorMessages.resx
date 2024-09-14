@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ArrayFilesHaveErrors" xml:space="preserve">
-    <value>Возникли следующие ошибки:</value>
+    <value>При обработке массива файлов возникли следующие ошибки:</value>
   </data>
   <data name="CantCreateInstanceOfType" xml:space="preserve">
     <value>Нет реализации для типа {0}</value>
