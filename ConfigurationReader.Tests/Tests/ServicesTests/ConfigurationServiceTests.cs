@@ -10,6 +10,7 @@ using ConfigurationReader.Infrastructure.Services.Interfaces;
 using ConfigurationReader.Tests.DI;
 using ConfigurationReader.Tests.Services.Interface;
 using Moq;
+using System.Text;
 
 namespace ConfigurationReader.Tests.Tests.ServicesTests;
 
@@ -101,14 +102,31 @@ public class ConfigurationServiceTests
         ConfigureMocks(configuration, files);
 
         var exception =
-            await Assert.ThrowsAsync<Exception>(
+            await Assert.ThrowsAsync<ArrayFilesHaveException>(
                 async () => await _configurationService.GetConfigurationFromFilesPaths(filesPaths));
 
-        Assert.Equal(
+        var errors = new List<string>()
+        {
             string.Format(ErrorMessages.ParsingFileHasError, files.Last().FilePath,
-                ErrorMessages.FileFormatNotAvailableForParsing), exception.Message);
+                ErrorMessages.FileFormatNotAvailableForParsing)
+        };
+
+        Assert.Equal(CreateExceptedArrayFileError(errors), exception.Message);
 
         _testService.CleanupTestDirectory(directoryPath);
+    }
+
+    private string CreateExceptedArrayFileError(List<string> errors)
+    {
+        var errorMessage = new StringBuilder();
+        errorMessage.AppendLine(ErrorMessages.ArrayFilesHaveErrors);
+
+        foreach (var error in errors)
+        {
+            errorMessage.AppendLine(error);
+        }
+
+        return errorMessage.ToString();
     }
 
     #endregion
@@ -179,7 +197,7 @@ public class ConfigurationServiceTests
             .Returns(mockParser.Object);
 
         var exception =
-            await Assert.ThrowsAsync<Exception>(
+            await Assert.ThrowsAsync<ProcessingFileException>(
                 async () => await _configurationService.GetConfigurationFromFilePathAsync(file.FilePath));
 
         Assert.Equal(

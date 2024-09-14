@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using ConfigurationReader.Infrastructure.DTO;
 using ConfigurationReader.Infrastructure.Resources;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
@@ -11,16 +12,16 @@ namespace ConfigurationReader.Web.Controllers.api;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class ConfigurationController : ControllerBase
 {
     private readonly IConfigurationService _configurationService;
-    private readonly ILogger<ConfigurationController> _logger;
 
     /// <inheritdoc />
-    public ConfigurationController(IConfigurationService configurationService, ILogger<ConfigurationController> logger)
+    public ConfigurationController(IConfigurationService configurationService)
     {
         _configurationService = configurationService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -29,32 +30,11 @@ public class ConfigurationController : ControllerBase
     /// <param name="directoryPath">Путь до файлов</param>
     [HttpGet]
     [Route("GetConfigurationsFromDirectoryPath")]
-    [ProducesResponseType(typeof(List<Configuration>), 200)]
-    public async Task<IActionResult> GetConfigurationsFromDirectoryPath(string directoryPath)
+    [ProducesResponseType(typeof(List<Configuration>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Configuration>>> GetConfigurationsFromDirectoryPath(string directoryPath)
     {
-        _logger.LogInformation(string.Format(TracingMessages.MethodStarted,
-            nameof(GetConfigurationsFromDirectoryPath), directoryPath));
-        var stopWatch = new Stopwatch();
-
-        try
-        {
-            stopWatch.Start();
-            var configurations = await _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
-            stopWatch.Stop();
-
-            _logger.LogInformation(string.Format(TracingMessages.MethodFinished,
-                nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
-
-            return Ok(configurations);
-        }
-        catch (Exception e)
-        {
-            var message = string.Format(ErrorMessages.ProcessingPathsHasErrors, e.Message);
-
-            _logger.LogError(message);
-
-            return BadRequest(message);
-        }
+        var configurations = await _configurationService.GetConfigurationsFromDirectoryPath(directoryPath);
+        return Ok(configurations);
     }
 
     /// <summary>
@@ -63,32 +43,11 @@ public class ConfigurationController : ControllerBase
     /// <param name="filesPaths"> Пути к файлам</param>
     [HttpGet]
     [Route("GetConfigurationFromFilesPaths")]
-    [ProducesResponseType(typeof(List<Configuration>), 200)]
-    public async Task<IActionResult> GetConfigurationFromFilesPaths(string[] filesPaths)
+    [ProducesResponseType(typeof(List<Configuration>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Configuration>>> GetConfigurationFromFilesPaths([FromQuery]string[] filesPaths)
     {
-        _logger.LogInformation(string.Format(TracingMessages.MethodStarted,
-            nameof(GetConfigurationFromFilesPaths), string.Join("; ", filesPaths)));
-        var stopWatch = new Stopwatch();
-
-        try
-        {
-            stopWatch.Start();
-            var configurations = await _configurationService.GetConfigurationFromFilesPaths(filesPaths);
-            stopWatch.Stop();
-
-            _logger.LogInformation(string.Format(TracingMessages.MethodFinished,
-                nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
-
-            return Ok(configurations);
-        }
-        catch (Exception e)
-        {
-            var message = string.Format(ErrorMessages.ProcessingPathsHasErrors, e.Message);
-
-            _logger.LogError(message);
-
-            return BadRequest(message);
-        }
+        var configurations = await _configurationService.GetConfigurationFromFilesPaths(filesPaths);
+        return Ok(configurations);
     }
 
     /// <summary>
@@ -97,29 +56,10 @@ public class ConfigurationController : ControllerBase
     /// <param name="filePath">Путь до файла</param>
     [HttpGet]
     [Route("GetConfigurationFromFilePath")]
-    [ProducesResponseType(typeof(Configuration), 200)]
-    public async Task<IActionResult> GetConfigurationFromFilePath(string filePath)
+    [ProducesResponseType(typeof(Configuration), StatusCodes.Status200OK)]
+    public async Task<ActionResult<Configuration>> GetConfigurationFromFilePath(string filePath)
     {
-        _logger.LogInformation(string.Format(TracingMessages.MethodStarted,
-            nameof(GetConfigurationFromFilesPaths), filePath));
-        var stopWatch = new Stopwatch();
-
-        try
-        {
-            stopWatch.Start();
-            var configuration = await _configurationService.GetConfigurationFromFilePathAsync(filePath);
-            stopWatch.Stop();
-
-            _logger.LogInformation(string.Format(TracingMessages.MethodFinished,
-                nameof(GetConfigurationsFromDirectoryPath), stopWatch.Elapsed));
-
-            return Ok(configuration);
-        }
-        catch (Exception e)
-        {
-            _logger.LogCritical(e.Message);
-
-            return BadRequest(e.Message);
-        }
+        var configuration = await _configurationService.GetConfigurationFromFilePathAsync(filePath);
+        return Ok(configuration);
     }
 }

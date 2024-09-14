@@ -1,8 +1,10 @@
 ﻿using ConfigurationReader.Infrastructure.DTO;
+using ConfigurationReader.Infrastructure.Exceptions;
 using ConfigurationReader.Infrastructure.Extensions;
 using ConfigurationReader.Infrastructure.Factories.Interfaces;
 using ConfigurationReader.Infrastructure.Resources;
 using ConfigurationReader.Infrastructure.Services.Interfaces;
+using System.Text;
 
 namespace ConfigurationReader.Infrastructure.Services;
 
@@ -31,18 +33,44 @@ internal class ConfigurationService(IFileService fileService, IConfigurationPars
         bool filesGetFromDirectoryPath = false)
     {
         var configurations = new List<Configuration>();
-        var tasks = files.Select(async file =>
+        var errors = new List<string>();
+
+        foreach (var fileDto in files)
         {
-            var configuration = await TryGetConfigurationFromFileAsync(file,
-                filesGetFromDirectoryPath);
-            return configuration;
-        });
+            try
+            {
+                var configuration = await TryGetConfigurationFromFileAsync(fileDto,
+                    filesGetFromDirectoryPath);
 
-        var results = await Task.WhenAll(tasks);
+                if (configuration is null)
+                    continue;
 
-        configurations.AddRange(results.OfType<Configuration>());
+                configurations.Add(configuration);
+            }
+            catch (Exception e)
+            {
+                errors.Add(e.Message);
+            }
+        }
+
+        ThrowIfAnyError(errors);
 
         return configurations;
+    }
+
+    private void ThrowIfAnyError(List<string> errors)
+    {
+        if (!errors.Any()) return;
+
+        var errorMessage = new StringBuilder();
+        errorMessage.AppendLine(ErrorMessages.ArrayFilesHaveErrors);
+
+        foreach (var error in errors)
+        {
+            errorMessage.AppendLine(error);
+        }
+
+        throw new ArrayFilesHaveException(errorMessage.ToString());
     }
 
     private async Task<Configuration?> TryGetConfigurationFromFileAsync(FileDto file,
@@ -59,7 +87,7 @@ internal class ConfigurationService(IFileService fileService, IConfigurationPars
                 if (ignoreNotAvailableForParsing)
                     return configuration;
 
-                throw new Exception(ErrorMessages.FileFormatNotAvailableForParsing);
+                throw new NoAvailableFileFormatException(ErrorMessages.FileFormatNotAvailableForParsing);
             }
 
             var parser = configurationParserFactory.CreateParser(configurationFileType.Value);
@@ -68,7 +96,7 @@ internal class ConfigurationService(IFileService fileService, IConfigurationPars
         }
         catch (Exception e)
         {
-            throw new Exception(string.Format(ErrorMessages.ParsingFileHasError, file.FilePath, e.Message));
+            throw new ProcessingFileException(string.Format(ErrorMessages.ParsingFileHasError, file.FilePath, e.Message), e);
         }
 
         return configuration;

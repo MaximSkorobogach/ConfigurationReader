@@ -1,5 +1,6 @@
 using System.Reflection;
 using ConfigurationReader.Infrastructure.DI;
+using ConfigurationReader.Web.Middlewares;
 
 namespace ConfigurationReader.Web;
 
@@ -21,7 +22,10 @@ public class Program
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
             .AddEnvironmentVariables();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<GlobalExceptionsFilter>();
+        });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
@@ -33,6 +37,8 @@ public class Program
         builder.Services.AddInfrastructure();
 
         var app = builder.Build();
+
+        app.UseMiddleware<RequestTimingMiddleware>();
 
         app.UseSwagger();
         app.UseSwaggerUI();

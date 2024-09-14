@@ -61,6 +61,15 @@ namespace ConfigurationReader.Infrastructure.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Возникли следующие ошибки:.
+        /// </summary>
+        public static string ArrayFilesHaveErrors {
+            get {
+                return ResourceManager.GetString("ArrayFilesHaveErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Нет реализации для типа {0}.
         /// </summary>
         public static string CantCreateInstanceOfType {
